@@ -1,0 +1,58 @@
+<mat-sidenav-container class="sidenav-container">
+  <mat-sidenav #drawer class="sidenav" fixedInViewport="true" [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'"
+    [mode]="(isHandset$ | async) ? 'over' : 'side'" [opened]="!(isHandset$ | async)">
+    <mat-toolbar id="toolbar-nav" color="primary">
+      <img id="imageGp-nav" src="../../../assets/images/MyLogoVector.png">
+    </mat-toolbar>
+    <mat-nav-list>
+      <a class="link-center"><img id="imageLfgn-nav" [routerLink]="['uno']" [src]="(imageUrl | async) || ''"></a>
+      <hr>
+      <a class="link" routerLinkActive="active" mat-list-item [routerLink]="['fields']"><i class="material-icons md-light">pause_presentation</i>Campos</a>
+      <a class="link" routerLinkActive="active" mat-list-item [routerLink]="['dos']"><i class="material-icons md-light">security</i>Equipos</a>
+      <a class="link" routerLinkActive="active" mat-list-item [routerLink]="['tres']"><i class="material-icons md-light">swap_horiz</i>Transferencias</a>
+      <hr>
+      <a class="link" routerLinkActive="active" mat-list-item [routerLink]="['uno']"><i class="material-icons md-light">event</i>Temporadas</a>
+      <a class="link" routerLinkActive="active" mat-list-item [routerLink]="['dos']"><i class="material-icons md-light">highlight</i>Torneos</a>
+      <a class="link" routerLinkActive="active" mat-list-item [routerLink]="['tres']"><i class="material-icons md-light">monetization_on</i>Finanzas</a>
+    </mat-nav-list>
+  </mat-sidenav>
+  <mat-sidenav-content>
+    <mat-toolbar color="primary">
+      <button type="button" aria-label="Toggle sidenav" mat-icon-button (click)="drawer.toggle()" *ngIf="isHandset$ | async">
+        <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
+      </button>
+      <span>LFGN</span>
+      <span class="example-spacer"></span>
+      <a id="guide" mat-icon-button matTooltip="Ir a documentación" href="https://docs.google.com/viewerng/viewer?url=http://victorpimentel.com/stuff/rubik.pdf"
+        target="_blank">
+        <i class="material-icons">import_contacts</i>
+      </a>
+      <button mat-icon-button [matMenuTriggerFor]="menu" button matTooltip="Perfil">
+        <img class="profile" [src]="(imageUrl | async) || ''">
+      </button>
+      <mat-menu #menu="matMenu" overlapTrigger="false">
+        <div id="infoProfile">
+          <div style="float:left;">
+            <img class="profile infoImgProf" [src]="(imageUrl | async) || ''">
+          </div>
+          <div style="float:right;">
+            <p id='infoName'>Liga de futbol de Guerrero Negro</p>
+            <p id='infoEmail'>{{email}}</p>
+            <p id="infoRole">Administrador</p>
+          </div>
+        </div>
+        <input id="inputFile" mat-menu-item type="file" (change)="uploadImage($event)">
+        <button mat-menu-item onclick="document.getElementById('inputFile').click()">
+          <mat-icon>cloud_upload</mat-icon>
+          <span>Cambiar imagen...</span>
+        </button>
+        <button mat-menu-item (click)="logout()">
+          <mat-icon>exit_to_app</mat-icon>
+          <span>Cerrar sesión</span>
+        </button>
+      </mat-menu>
+    </mat-toolbar>
+    <router-outlet></router-outlet>
+    <div *ngIf="show">Text to show</div>
+  </mat-sidenav-content>
+</mat-sidenav-container>

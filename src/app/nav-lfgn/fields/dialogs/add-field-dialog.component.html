@@ -1,0 +1,11 @@
+<h1 mat-dialog-title>Agregar campo</h1>
+<div mat-dialog-content>
+  <mat-form-field>
+    <input matInput placeholder="Nombre" [formControl]="nameField" required autofocus>
+    <mat-error *ngIf="nameField.invalid">{{getErrorMessage()}}</mat-error>
+  </mat-form-field>
+</div>
+<div mat-dialog-actions>
+  <button mat-raised-button (click)="onNoClick()">Cancelar</button>
+  <button mat-raised-button (click)="add()" color="primary">Agregar</button>
+</div>

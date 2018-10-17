@@ -1,0 +1,22 @@
+<div class="body">
+  <form (ngSubmit)="login()">
+    <mat-card>
+      <div class="header-card">
+        <img class="img" [src]="(imageUrl | async) || ''">
+      </div>
+      <mat-form-field>
+        <input matInput placeholder="Correo electrónico" [formControl]="email" required autofocus>
+        <mat-icon matSuffix>email</mat-icon>
+        <mat-error *ngIf="email.invalid">{{getErrorMessage()}}</mat-error>
+      </mat-form-field>
+      <mat-form-field>
+        <input matInput placeholder="Contraseña" [type]="hide ? 'password' : 'text'" [formControl]="password" required>
+        <mat-icon matSuffix (click)="hide = !hide">{{hide ? 'visibility' : 'visibility_off'}}</mat-icon>
+        <mat-error *ngIf="password.invalid">{{getErrorMessage()}}</mat-error>
+      </mat-form-field>
+      <mat-card-actions>
+        <button type="submit" mat-raised-button color="primary">Siguiente</button>
+      </mat-card-actions>
+    </mat-card>
+  </form>
+</div>

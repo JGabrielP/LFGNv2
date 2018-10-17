@@ -1,0 +1,104 @@
+.sidenav-container {
+  height: 100%;
+}
+
+.sidenav {
+  width: 200px;
+  background-color: #19212b;
+}
+
+.mat-toolbar.mat-primary {
+  position: sticky;
+  top: 0;
+}
+
+.link {
+  color: rgba(255, 255, 255, .7);
+}
+
+.link:hover {
+  background-color: rgba(255, 255, 255, .08);
+}
+
+.link.active {
+  color: #4fc3f7;
+}
+
+.link-center {
+  margin-left: 25%;
+}
+
+#imageLfgn-nav {
+  width: 50%;
+}
+
+hr {
+  width: 90%;
+  border-style: groove;
+}
+
+.material-icons.md-light {
+  margin-right: 10px;
+}
+
+.profile {
+  background-size: 40px 40px;
+  border-radius: 50%;
+  margin: 0;
+  height: 40px;
+  width: 40px;
+  z-index: 0;
+  background-color: white;
+  padding: 0;
+}
+
+.example-spacer {
+  flex: 1 1 auto;
+}
+
+#infoProfile {
+  font-size: 13px;
+}
+
+#infoProfile p {
+  margin: 5px;
+}
+
+#infoName {
+  font-weight: bold;
+}
+
+#infoEmail {
+  color: #666;
+}
+
+#infoRole {
+  font-style: italic;
+}
+
+#toolbar-nav {
+  background-color: #262f3d;
+  border-bottom: 1px solid #404854;
+}
+
+#imageGp-nav {
+  margin-left: auto;
+  margin-right: auto;
+  height: 35px;
+  width: auto;
+}
+
+#inputFile {
+  display: none;
+}
+
+#guide {
+  margin-right: 14px;
+}
+
+.infoImgProf {
+  height: 70px;
+  width: auto;
+  margin-right: 5px;
+  margin-left: 10px;
+}
