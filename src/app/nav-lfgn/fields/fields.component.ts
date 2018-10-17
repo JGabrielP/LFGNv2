@@ -60,7 +60,7 @@ export class FieldsComponent implements OnInit {
 })
 export class AddFieldDialog {
 
-  private nameField = new FormControl('', [Validators.required]);
+  nameField = new FormControl('', [Validators.required]);
 
   constructor(public dialogRef: MatDialogRef<AddFieldDialog>) { }
 
@@ -68,7 +68,7 @@ export class AddFieldDialog {
     return this.nameField.hasError('required') ? 'Debe introducir un valor' : ''
   }
 
-  private add() {
+  add() {
     if (!this.nameField.hasError('required'))
       this.dialogRef.close({ Name: this.nameField.value })
   }
@@ -97,7 +97,7 @@ export class DeleteFieldDialog {
 })
 export class EditFieldDialog {
 
-  private nameField = new FormControl('', [Validators.required]);
+  nameField = new FormControl('', [Validators.required]);
 
   constructor(public dialogRef: MatDialogRef<EditFieldDialog>, @Inject(MAT_DIALOG_DATA) public data: Field) { }
 
@@ -105,7 +105,7 @@ export class EditFieldDialog {
     return this.nameField.hasError('required') ? 'Debe introducir un valor' : ''
   }
 
-  private edit() {
+  edit() {
     if (!this.nameField.hasError('required'))
       this.dialogRef.close({ Id: this.data.Id, Name: this.nameField.value })
   }

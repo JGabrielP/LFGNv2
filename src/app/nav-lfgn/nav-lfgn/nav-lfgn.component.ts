@@ -13,9 +13,9 @@ import { Router, NavigationStart, NavigationEnd, Event, RouterEvent } from '@ang
 })
 export class NavLFGNComponent {
 
-  private imageUrl: Observable<string | null>;
-  private uploadPercent: Observable<number>;
-  private email: string;
+  imageUrl: Observable<string | null>;
+  uploadPercent: Observable<number>;
+  email: string;
   show: boolean = true;
 
   isHandset$: Observable<boolean> = this.breakpointObserver.observe(Breakpoints.Handset).pipe(map(result => result.matches));
@@ -38,14 +38,13 @@ export class NavLFGNComponent {
     this.imageUrl = this.authService.getImage();
   }
 
-  private logout() {
+  logout() {
     this.authService.logout();
   }
 
-  private uploadImage(event) {
+  uploadImage(event) {
     this.authService.setImage(event.target.files[0]).snapshotChanges().pipe(
       finalize(() => this.imageUrl = this.authService.getImage())
     ).subscribe();
   }
-
 }
