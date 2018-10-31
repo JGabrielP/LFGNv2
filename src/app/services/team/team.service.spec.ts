@@ -1,12 +1,12 @@
 import { TestBed } from '@angular/core/testing';
 
-import { FieldResolveService } from './field-resolve.service';
+import { TeamService } from './team.service';
 
-describe('FieldResolveService', () => {
+describe('TeamService', () => {
   beforeEach(() => TestBed.configureTestingModule({}));
 
   it('should be created', () => {
-    const service: FieldResolveService = TestBed.get(FieldResolveService);
+    const service: TeamService = TestBed.get(TeamService);
     expect(service).toBeTruthy();
   });
 });

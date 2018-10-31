@@ -1,0 +1,32 @@
+<div id="content">
+  <mat-card class="card" *ngFor="let team of teams | async">
+    <mat-card-header class="header">
+      <img mat-card-avatar class="logo-team" [src]="team.LogoUrl || '../../../../../../assets/images/NoLogo.png'">
+      <mat-card-title class="name-team">{{team.Name}}</mat-card-title>
+    </mat-card-header>
+    <mat-card-content class="players-content">
+      <div *ngIf="(players | async)?.length != 0; else noPlayers">
+        <mat-card class="card-player" *ngFor="let player of players | async">
+          <img class="photo-player" [src]="player.PhotoUrl || '../../../../../../assets/images/NoPhotoPlayer.png'">
+          <div class="info-player">
+            <p>{{player.Name}}</p>
+            <p>{{player.FirstName}} {{player.LastName}}</p>
+            <p>{{player.BirthDate}}</p>
+            <p class="bold">{{player.Id}}</p>
+          </div>
+          <div class="buttons">
+            <button mat-icon-button matTooltip="Dar de baja" (click)="openDropDialog(player)">
+              <mat-icon>delete</mat-icon>
+            </button>
+          </div>
+        </mat-card>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>
+<button class="fab-button" mat-fab color="primary" matTooltip="Nuevo jugador" (click)="openAddDialog()">
+  <mat-icon>add</mat-icon>
+</button>
+<ng-template #noPlayers>
+  No tiene jugadores registrados.
+</ng-template>

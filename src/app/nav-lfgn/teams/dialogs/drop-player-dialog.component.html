@@ -1,0 +1,8 @@
+<h1 mat-dialog-title>Baja de jugador</h1>
+<div mat-dialog-content>
+  <p>Esta acción dará de baja al jugador, quedará libre. Si la situación es cambiar de equipo, diríjase a la sección de tranferencias.</p>
+</div>
+<div mat-dialog-actions align="end">
+  <button mat-raised-button (click)="onNoClick()">Cancelar</button>
+  <button mat-raised-button color="warn" cdkFocusInitial [mat-dialog-close]="data">Dar de baja</button>
+</div>

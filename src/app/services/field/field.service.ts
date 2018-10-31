@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/firestore';
-import { Observable, of } from 'rxjs';
-import { delay } from 'rxjs/operators';
+import { Observable} from 'rxjs';
 import { Field } from '../../models/field/field';
 
 @Injectable({
@@ -31,7 +30,7 @@ export class FieldService {
     return this.fieldsCollection.doc(field.Id).delete();
   }
 
-  get(): any {
-    return of(this.fields).pipe(delay(2000));
+  get(){
+    return this.fields;
   }
 }

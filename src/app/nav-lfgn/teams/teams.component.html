@@ -1,0 +1,27 @@
+<div>
+  <mat-card class="card" *ngFor="let team of teams | async">
+    <div class="header-card">
+      <div class="fabLogoTeam">
+        <img class="LogoTeam" [src]=" team.LogoUrl || '../../../assets/images/NoLogo.png' ">
+      </div>
+      <img class="LogoLeague" src="../../../assets/images/LogoTeams.png">
+    </div>
+    <div class="body">
+      {{team.Name}}
+      <div class="buttons">
+        <button mat-icon-button matTooltip="Eliminar" (click)="openDeleteDialog(team)">
+          <mat-icon>delete</mat-icon>
+        </button>
+        <button mat-icon-button matTooltip="Editar" (click)="openEditDialog(team)">
+          <mat-icon>edit</mat-icon>
+        </button>
+        <button mat-icon-button matTooltip="Información" (click)="onInformation(team)">
+          <mat-icon>info</mat-icon>
+        </button>
+      </div>
+    </div>
+  </mat-card>
+</div>
+<button class="fab-button" mat-fab color="primary" matTooltip="Nuevo equipo" (click)="openAddDialog()">
+  <mat-icon>add</mat-icon>
+</button>

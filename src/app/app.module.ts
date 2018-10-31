@@ -4,8 +4,6 @@ import { NgModule } from '@angular/core';
 import { MaterialModule } from './material.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
-import { ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
-
 //FIREBASE
 import { AngularFireModule } from '@angular/fire';
 import { environment } from '../environments/environment';
@@ -17,6 +15,8 @@ import { AngularFirestoreModule } from '@angular/fire/firestore';
 import { AuthService } from './services/auth/auth.service';
 import { AuthGuard } from './services/guard/auth.guard';
 import { FieldService } from './services/field/field.service';
+import { TeamService } from './services/team/team.service';
+import { PlayerService } from './services/player/player.service';
 
 //ROUTINGS
 import { AppRoutingModule } from './app-routing.module';
@@ -25,26 +25,28 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { LoginComponent } from './login/login.component';
 import { NavLFGNComponent } from './nav-lfgn/nav-lfgn/nav-lfgn.component';
-import { FirstPageComponent } from './nav-lfgn/first-page/first-page.component';
-import { SecondPageComponent } from './nav-lfgn/second-page/second-page.component';
-import { ThirdPageComponent } from './nav-lfgn/third-page/third-page.component';
 import { NotFoundComponent } from './not-found/not-found.component';
 import { FieldsComponent, AddFieldDialog, DeleteFieldDialog, EditFieldDialog } from './nav-lfgn/fields/fields.component';
-import { FieldResolveService } from './services/field/field-resolve.service';
+import { TeamsComponent, AddTeamDialog, DeleteTeamDialog, EditTeamDialog } from './nav-lfgn/teams/teams.component';
+import { TeamDetailsComponent, AddPlayerDialog, DropPlayerDialog } from './nav-lfgn/teams/team-details/team-details.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
     NavLFGNComponent,
-    FirstPageComponent,
-    SecondPageComponent,
-    ThirdPageComponent,
     NotFoundComponent,
     FieldsComponent,
     AddFieldDialog,
     DeleteFieldDialog,
-    EditFieldDialog
+    EditFieldDialog,
+    TeamsComponent,
+    AddTeamDialog,
+    DeleteTeamDialog,
+    EditTeamDialog,
+    TeamDetailsComponent,
+    AddPlayerDialog,
+    DropPlayerDialog
   ],
   imports: [
     BrowserModule,
@@ -57,8 +59,8 @@ import { FieldResolveService } from './services/field/field-resolve.service';
     MaterialModule,
     AppRoutingModule
   ],
-  entryComponents: [AddFieldDialog, DeleteFieldDialog, EditFieldDialog],
-  providers: [AuthService, AuthGuard, FieldService, FieldResolveService],
+  entryComponents: [AddFieldDialog, DeleteFieldDialog, EditFieldDialog, AddTeamDialog, DeleteTeamDialog, EditTeamDialog, AddPlayerDialog, DropPlayerDialog],
+  providers: [AuthService, AuthGuard, FieldService, TeamService, PlayerService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

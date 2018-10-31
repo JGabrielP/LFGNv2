@@ -1,0 +1,68 @@
+.card {
+  display: inline-block;
+  margin: 20px;
+  padding: 0px;
+}
+
+.card:hover {
+  box-shadow: 0 0 20px black;
+}
+
+.header-card {
+  text-align: center;
+}
+
+.body {
+  padding-top: 40px;
+  text-align: center;
+  background-color: rgb(63, 81, 181);
+  color: white;
+  font-size: 20px;
+}
+
+.buttons {
+  text-align: left;
+  visibility: hidden;
+  color: white;
+}
+
+.LogoLeague {
+  height: 110px;
+}
+
+.fabLogoTeam {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  top: 3em;
+  bottom: 0;
+  margin-bottom: -30px;
+  width: 100px;
+  height: 100px;
+  border-radius: 150px;
+  border-color: rgb(63, 81, 181);
+  border-width: 1px;
+  border-style: solid;
+  background-color: white;
+}
+
+.LogoTeam {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  top: 1em;
+  bottom: 0;
+  margin-bottom: -30px;
+  width: 70px;
+  height: 70px;
+}
+
+.card:hover .buttons {
+  visibility: visible;
+}
+
+.fab-button {
+  position: fixed;
+  bottom: 1rem;
+  right: 1rem;
+}

@@ -4,7 +4,6 @@ import { Field } from '../../models/field/field';
 import { FieldService } from '../../services/field/field.service';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA, MatSnackBar } from '@angular/material';
 import { FormControl, Validators } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-fields',
@@ -13,13 +12,13 @@ import { ActivatedRoute } from '@angular/router';
 })
 export class FieldsComponent implements OnInit {
 
-  fields: Field[];
+  fields: Observable<Field[]>;
 
-  constructor(private fieldService: FieldService, private dialog: MatDialog, public snackBar: MatSnackBar, public route: ActivatedRoute) {
-    this.fields = this.route.snapshot.data['campos'];
+  constructor(private fieldService: FieldService, private dialog: MatDialog, public snackBar: MatSnackBar) {
   }
 
   ngOnInit() {
+    this.fields = this.fieldService.get();
   }
 
   openAddDialog(): void {

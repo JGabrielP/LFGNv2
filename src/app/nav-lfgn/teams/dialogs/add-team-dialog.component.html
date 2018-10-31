@@ -1,0 +1,78 @@
+<h1 mat-dialog-title>Agregar equipo</h1>
+<div mat-dialog-content>
+  <mat-horizontal-stepper [linear]="true" #stepper>
+    <mat-step [stepControl]="teamCtrl">
+      <form [formGroup]="teamCtrl">
+        <ng-template matStepLabel>Nombre y logotipo</ng-template>
+        <mat-form-field>
+          <input matInput placeholder="Nombre" [formControl]="teamCtrl" required>
+          <mat-error *ngIf="teamCtrl.invalid">{{getErrorMessage()}}</mat-error>
+        </mat-form-field>
+        <input id="inputFile" class="input-hide" type="file" (change)="setLogo($event)" accept="image/*">
+        <button id="btn-add-logo" mat-button onclick="document.getElementById('inputFile').click()">
+          <mat-icon>cloud_upload</mat-icon>
+          <span> Logotipo...</span>
+        </button>
+        <img id="logo-preview" [src]="LogoUrlBuffer || 'http://placehold.it/40'">
+        <mat-dialog-actions align="end">
+          <button mat-button (click)="onNoClick()">Cancelar</button>
+          <button mat-button matStepperNext>Siguiente</button>
+        </mat-dialog-actions>
+      </form>
+    </mat-step>
+    <mat-step>
+      <form [formGroup]="playerCtrl">
+        <ng-template matStepLabel>Alta de jugadores</ng-template>
+        <mat-form-field class="spacer">
+          <input matInput placeholder="CURP" formControlName="curpCtrl" required maxlength="18" minlength="18">
+          <mat-error *ngIf="playerCtrl.controls['curpCtrl'].errors">{{getErrorMessage()}}</mat-error>
+        </mat-form-field>
+        <mat-form-field class="spacer">
+          <input matInput [matDatepicker]="picker" placeholder="Fecha de nacimiento" formControlName="birthdateCtrl"
+            required>
+          <mat-error *ngIf="playerCtrl.controls['birthdateCtrl'].errors">Debe introducir un valor</mat-error>
+          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+        </mat-form-field>
+        <input id="inputPhoto" class="input-hide" type="file" (change)="setPhoto($event)" accept="image/*">
+        <button id="btn-add-logo" mat-button onclick="document.getElementById('inputPhoto').click()">
+          <mat-icon>cloud_upload</mat-icon>
+          <span> Fotografía...</span>
+        </button>
+        <img id="logo-preview" [src]="PhotoUrlBuffer || 'http://placehold.it/40'">
+        <br>
+        <mat-form-field class="spacer">
+          <input matInput placeholder="Nombre(s)" formControlName="nameCtrl" required>
+          <mat-error *ngIf="playerCtrl.controls['nameCtrl'].errors">Debe introducir un valor</mat-error>
+        </mat-form-field>
+        <mat-form-field class="spacer">
+          <input matInput placeholder="Apellido paterno" formControlName="firstNameCtrl" required>
+          <mat-error *ngIf="playerCtrl.controls['firstNameCtrl'].errors">Debe introducir un valor</mat-error>
+        </mat-form-field>
+        <mat-form-field class="spacer">
+          <input matInput placeholder="Apellido materno" formControlName="lastNameCtrl" required>
+          <mat-error *ngIf="playerCtrl.controls['lastNameCtrl'].errors">Debe introducir un valor</mat-error>
+        </mat-form-field>
+        <button mat-flat-button color="primary" (click)="addPlayerList()">Agregar</button><br>
+        <div id="player-registered" *ngFor="let player of players">
+          <img [src]=" player.PhotoUrl || '../../../assets/images/NoLogo.png' " class="photo-size" matTooltip="{{player.Name}} {{player.FirstName}} {{player.LastName}}">
+          <button mat-icon-button color="primary" (click)="removePlayer(player)">
+            <mat-icon class="material-icons md-18">clear</mat-icon>
+          </button>
+        </div>
+        <mat-dialog-actions align="end">
+          <button mat-button matStepperPrevious>Atrás</button>
+          <button mat-button matStepperNext>Siguiente</button>
+        </mat-dialog-actions>
+      </form>
+    </mat-step>
+    <mat-step>
+      <ng-template matStepLabel>Terminar</ng-template>
+      Ahora ya está hecho. ¿Desea terminar?
+      <mat-dialog-actions align="end">
+        <button mat-button matStepperPrevious>Atrás</button>
+        <button mat-button (click)="add()">Guardar</button>
+      </mat-dialog-actions>
+    </mat-step>
+  </mat-horizontal-stepper>
+</div>

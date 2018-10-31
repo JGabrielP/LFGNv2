@@ -102,3 +102,7 @@ hr {
   margin-right: 5px;
   margin-left: 10px;
 }
+
+mat-toolbar {
+  z-index: 999999;
+}

@@ -5,15 +5,17 @@
       <img id="imageGp-nav" src="../../../assets/images/MyLogoVector.png">
     </mat-toolbar>
     <mat-nav-list>
-      <a class="link-center"><img id="imageLfgn-nav" [routerLink]="['uno']" [src]="(imageUrl | async) || ''"></a>
+      <a class="link-center"><img id="imageLfgn-nav" [src]="(imageUrl | async) || ''"></a>
       <hr>
       <a class="link" routerLinkActive="active" mat-list-item [routerLink]="['fields']"><i class="material-icons md-light">pause_presentation</i>Campos</a>
-      <a class="link" routerLinkActive="active" mat-list-item [routerLink]="['dos']"><i class="material-icons md-light">security</i>Equipos</a>
-      <a class="link" routerLinkActive="active" mat-list-item [routerLink]="['tres']"><i class="material-icons md-light">swap_horiz</i>Transferencias</a>
+      <a class="link" routerLinkActive="active" mat-list-item [routerLink]="['teams']"><i class="material-icons md-light">security</i>Equipos</a>
+      <a class="link" routerLinkActive="active" mat-list-item><i class="material-icons md-light">swap_horiz</i>Transferencias</a>
       <hr>
-      <a class="link" routerLinkActive="active" mat-list-item [routerLink]="['uno']"><i class="material-icons md-light">event</i>Temporadas</a>
-      <a class="link" routerLinkActive="active" mat-list-item [routerLink]="['dos']"><i class="material-icons md-light">highlight</i>Torneos</a>
-      <a class="link" routerLinkActive="active" mat-list-item [routerLink]="['tres']"><i class="material-icons md-light">monetization_on</i>Finanzas</a>
+      <a class="link" routerLinkActive="active" mat-list-item><i class="material-icons md-light">event</i>Eventos
+        especiales</a>
+      <a class="link" routerLinkActive="active" mat-list-item><i class="material-icons md-light">highlight</i>Torneos</a>
+      <a class="link" routerLinkActive="active" mat-list-item><i class="material-icons md-light">insert_chart_outlined</i>Estadísticas</a>
+      <a class="link" routerLinkActive="active" mat-list-item><i class="material-icons md-light">monetization_on</i>Finanzas</a>
     </mat-nav-list>
   </mat-sidenav>
   <mat-sidenav-content>
@@ -41,7 +43,7 @@
             <p id="infoRole">Administrador</p>
           </div>
         </div>
-        <input id="inputFile" mat-menu-item type="file" (change)="uploadImage($event)">
+        <input id="inputFile" mat-menu-item type="file" (change)="uploadImage($event)" accept="image/*">
         <button mat-menu-item onclick="document.getElementById('inputFile').click()">
           <mat-icon>cloud_upload</mat-icon>
           <span>Cambiar imagen...</span>
@@ -53,6 +55,5 @@
       </mat-menu>
     </mat-toolbar>
     <router-outlet></router-outlet>
-    <div *ngIf="show">Text to show</div>
   </mat-sidenav-content>
 </mat-sidenav-container>

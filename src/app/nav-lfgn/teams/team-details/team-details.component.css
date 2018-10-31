@@ -1,0 +1,75 @@
+#content {
+    margin: 20px;
+}
+
+.card {
+    max-width: 100%;
+    padding: 0;
+}
+
+.card-player {
+    width: 300px;
+    display: inline-block;
+    margin-right: 10px;
+    margin-left: 10px;
+    margin-top: 10px;
+    padding-bottom: 0;
+}
+
+.card-player:hover {
+    box-shadow: 0 0 20px black;
+}
+
+.photo-player {
+    width: 30%;
+    height: 100px;
+    float: left;
+}
+
+.info-player {
+    width: 70%;
+    float: right;
+    text-align: right;
+}
+
+.info-player p {
+    margin-top: 0px;
+    margin-bottom: 10px;
+}
+
+.players-content {
+    padding: 20px;
+}
+
+.header {
+    padding: 15px;
+    background-color: #002984;
+}
+
+.logo-team {
+    background-color: white;
+}
+
+.name-team {
+    font-size: 30px;
+    color: white;
+}
+
+.bold {
+    font-weight: bold;
+}
+
+.fab-button {
+    position: fixed;
+    bottom: 1rem;
+    right: 1rem;
+}
+
+.buttons {
+    text-align: left;
+    visibility: hidden;
+}
+
+.card-player:hover .buttons {
+    visibility: visible;
+}
