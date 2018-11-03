@@ -7,17 +7,21 @@
     <mat-card-content class="players-content">
       <div *ngIf="(players | async)?.length != 0; else noPlayers">
         <mat-card class="card-player" *ngFor="let player of players | async">
-          <img class="photo-player" [src]="player.PhotoUrl || '../../../../../../assets/images/NoPhotoPlayer.png'">
-          <div class="info-player">
-            <p>{{player.Name}}</p>
-            <p>{{player.FirstName}} {{player.LastName}}</p>
-            <p>{{player.BirthDate}}</p>
-            <p class="bold">{{player.Id}}</p>
-          </div>
-          <div class="buttons">
-            <button mat-icon-button matTooltip="Dar de baja" (click)="openDropDialog(player)">
-              <mat-icon>delete</mat-icon>
-            </button>
+          <mat-card-content class="player-card-content">
+            <img class="photo-player" [src]="player.PhotoUrl || '../../../../../../assets/images/NoPhotoPlayer.png'">
+            <div class="info-player">
+              <p>{{player.Name}}</p>
+              <p>{{player.FirstName}} {{player.LastName}}</p>
+              <p>{{player.BirthDate}}</p>
+              <p class="bold">{{player.Id}}</p>
+            </div>
+          </mat-card-content>
+          <div class="bottom-card-btn">
+            <div class="buttons">
+              <button mat-icon-button matTooltip="Dar de baja" (click)="openDropDialog(player)">
+                <mat-icon>arrow_downward</mat-icon>
+              </button>
+            </div>
           </div>
         </mat-card>
       </div>

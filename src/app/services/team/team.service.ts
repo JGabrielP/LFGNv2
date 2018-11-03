@@ -10,6 +10,7 @@ import { AngularFireStorage } from '@angular/fire/storage';
 export class TeamService {
 
   public teamsCollection: AngularFirestoreCollection<Team>;
+  public teamsCollectionQuery: AngularFirestoreCollection<Team>;
   public teams: Observable<Team[]>;
 
   constructor(private afs: AngularFirestore, private fireStorage: AngularFireStorage) {
@@ -38,7 +39,8 @@ export class TeamService {
   }
 
   getTeam(id: any) {
-    return this.afs.collection('teams', ref => ref.where('Id', '==', id)).valueChanges();
+    this.teamsCollectionQuery = this.afs.collection('teams', ref => ref.where('Id', '==', id));
+    return this.teamsCollectionQuery.valueChanges();
   }
 
   setLogo(file: File, id: string) {

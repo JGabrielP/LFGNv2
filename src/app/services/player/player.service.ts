@@ -44,6 +44,11 @@ export class PlayerService {
     return this.playersCollectionQuery.valueChanges();
   }
 
+  getPlayer(id: string) {
+    this.playersCollectionQuery = this.afs.collection('players', ref => ref.where('Id', '==', id));
+    return this.playersCollectionQuery.valueChanges();
+  }
+
   async ifExists(id: string) {
     if (await this.playersCollection.doc(id).valueChanges().pipe(first()).toPromise()) return true;
   }

@@ -1,0 +1,39 @@
+<h1 mat-dialog-title>Nueva transferencia</h1>
+<div mat-dialog-content>
+    <p>Especifique el jugador</p>
+    <form [formGroup]="playerCurpCtrl">
+        <mat-form-field>
+            <input matInput [formControl]="playerCurpCtrl" placeholder="CURP" required maxlength="18" minlength="18">
+            <mat-error *ngIf="playerCurpCtrl.invalid">{{getErrorMessage()}}</mat-error>
+        </mat-form-field>
+        <button class="btn-search" mat-button (click)="searchPlayer()">Buscar</button>
+    </form>
+    <mat-card class="card-player" *ngFor="let play of player | async">
+        <mat-card-content class="player-card-content">
+            <img class="photo-player" [src]="play.PhotoUrl || '../../../../../../assets/images/NoPhotoPlayer.png'">
+            <div class="info-player">
+                <p>{{play.Name}}</p>
+                <p>{{play.FirstName}} {{play.LastName}}</p>
+                <p>{{play.BirthDate}}</p>
+                <p class="bold">{{play.Id}}</p>
+            </div>
+        </mat-card-content>
+    </mat-card>
+    <div [hidden]=show>
+        <mat-form-field>
+            <input matInput placeholder="Equipo origen" disabled [value]="teamSource.Name">
+        </mat-form-field>
+        <mat-form-field>
+            <mat-select placeholder="Equipo destino" [formControl]="teamDestinCtrl" required>
+                <mat-option *ngFor="let team of teamsDestin | async" [value]="team">
+                    {{team.Name}}
+                </mat-option>
+            </mat-select>
+            <mat-error *ngIf="teamDestinCtrl.invalid">Selecciona un equipo destino</mat-error>
+        </mat-form-field>
+    </div>
+</div>
+<div mat-dialog-actions align="end">
+    <button mat-button (click)="onNoClick()">Cancelar</button>
+    <button mat-button (click)="tranfer(play)">Transferir</button>
+</div>

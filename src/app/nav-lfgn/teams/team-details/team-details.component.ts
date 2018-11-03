@@ -72,6 +72,7 @@ export class AddPlayerDialog {
         this.playerCtrl.get('curpCtrl').hasError('minlength') ? 'Deben ser 18 caracteres' :
           '';
   }
+  
   onNoClick(): void {
     this.dialogRef.close(null);
   }
@@ -88,13 +89,12 @@ export class AddPlayerDialog {
 
   async add() {
     if (!this.playerCtrl.get('curpCtrl').hasError('required') && !this.playerCtrl.get('nameCtrl').hasError('required') && !this.playerCtrl.get('firstNameCtrl').hasError('required') && !this.playerCtrl.get('lastNameCtrl').hasError('required') && !this.playerCtrl.get('birthdateCtrl').hasError('required') && !this.playerCtrl.get('curpCtrl').hasError('minlength') && !this.playerCtrl.get('curpCtrl').hasError('exists')) {
-      let date = this.playerCtrl.get('birthdateCtrl').value.getDate() + "-" + (this.playerCtrl.get('birthdateCtrl').value.getMonth() + 1) + "-" + this.playerCtrl.get('birthdateCtrl').value.getFullYear();
       if (this.PhotoFile == null)
-        this.playerService.add({ Id: this.playerCtrl.get('curpCtrl').value, Name: this.playerCtrl.get('nameCtrl').value, LastName: this.playerCtrl.get('lastNameCtrl').value, FirstName: this.playerCtrl.get('firstNameCtrl').value, BirthDate: date, Team: this.data });
+        this.playerService.add({ Id: this.playerCtrl.get('curpCtrl').value, Name: this.playerCtrl.get('nameCtrl').value, LastName: this.playerCtrl.get('lastNameCtrl').value, FirstName: this.playerCtrl.get('firstNameCtrl').value, BirthDate: this.playerCtrl.get('birthdateCtrl').value.toLocaleDateString(), Team: this.data });
       else {
         const photoUrl = await this.playerService.setPhoto(this.PhotoFile, this.data);
         photoUrl.task.snapshot.ref.getDownloadURL().then(photoUrl => {
-          this.playerService.add({ Id: this.playerCtrl.get('curpCtrl').value, Name: this.playerCtrl.get('nameCtrl').value, LastName: this.playerCtrl.get('lastNameCtrl').value, FirstName: this.playerCtrl.get('firstNameCtrl').value, BirthDate: date, PhotoUrl: photoUrl, Team: this.data });
+          this.playerService.add({ Id: this.playerCtrl.get('curpCtrl').value, Name: this.playerCtrl.get('nameCtrl').value, LastName: this.playerCtrl.get('lastNameCtrl').value, FirstName: this.playerCtrl.get('firstNameCtrl').value, BirthDate: this.playerCtrl.get('birthdateCtrl').value.toLocaleDateString(), PhotoUrl: photoUrl, Team: this.data });
         });
       }
       this.dialogRef.close('ok');

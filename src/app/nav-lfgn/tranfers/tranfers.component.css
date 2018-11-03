@@ -1,0 +1,48 @@
+#content {
+    margin: 20px;
+}
+
+.card-transfer {
+    width: 300px;
+    margin: 20px;
+    display: inline-block;
+    padding: 0;
+}
+
+.fab-button {
+    position: fixed;
+    bottom: 1rem;
+    right: 1rem;
+}
+
+.card-header {
+    padding: 20px 20px 0px 20px;
+}
+
+.card-content {
+    background-color: #002984;
+    color: white;
+    padding: 10px;
+}
+
+.example-header-image {
+    background-color: gray;
+}
+
+.team-source {
+    width: 40%;
+    text-align: left;
+    display: inline-block;
+}
+
+.team-dest {
+    width: 40%;
+    text-align: right;
+    display: inline-block;
+}
+
+.icon-transfer {
+    width: 20%;
+    text-align: center;
+    display: inline-block;
+}

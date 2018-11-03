@@ -17,6 +17,7 @@ import { AuthGuard } from './services/guard/auth.guard';
 import { FieldService } from './services/field/field.service';
 import { TeamService } from './services/team/team.service';
 import { PlayerService } from './services/player/player.service';
+import { TranferService } from './services/tranfer/tranfer.service';
 
 //ROUTINGS
 import { AppRoutingModule } from './app-routing.module';
@@ -29,6 +30,7 @@ import { NotFoundComponent } from './not-found/not-found.component';
 import { FieldsComponent, AddFieldDialog, DeleteFieldDialog, EditFieldDialog } from './nav-lfgn/fields/fields.component';
 import { TeamsComponent, AddTeamDialog, DeleteTeamDialog, EditTeamDialog } from './nav-lfgn/teams/teams.component';
 import { TeamDetailsComponent, AddPlayerDialog, DropPlayerDialog } from './nav-lfgn/teams/team-details/team-details.component';
+import { TranfersComponent, AddTranferDialog } from './nav-lfgn/tranfers/tranfers.component';
 
 @NgModule({
   declarations: [
@@ -46,7 +48,9 @@ import { TeamDetailsComponent, AddPlayerDialog, DropPlayerDialog } from './nav-l
     EditTeamDialog,
     TeamDetailsComponent,
     AddPlayerDialog,
-    DropPlayerDialog
+    DropPlayerDialog,
+    TranfersComponent,
+    AddTranferDialog
   ],
   imports: [
     BrowserModule,
@@ -59,8 +63,8 @@ import { TeamDetailsComponent, AddPlayerDialog, DropPlayerDialog } from './nav-l
     MaterialModule,
     AppRoutingModule
   ],
-  entryComponents: [AddFieldDialog, DeleteFieldDialog, EditFieldDialog, AddTeamDialog, DeleteTeamDialog, EditTeamDialog, AddPlayerDialog, DropPlayerDialog],
-  providers: [AuthService, AuthGuard, FieldService, TeamService, PlayerService],
+  entryComponents: [AddFieldDialog, DeleteFieldDialog, EditFieldDialog, AddTeamDialog, DeleteTeamDialog, EditTeamDialog, AddPlayerDialog, DropPlayerDialog, AddTranferDialog],
+  providers: [AuthService, AuthGuard, FieldService, TeamService, PlayerService, TranferService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

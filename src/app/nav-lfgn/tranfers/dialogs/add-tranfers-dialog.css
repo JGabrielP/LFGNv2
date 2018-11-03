@@ -1,0 +1,36 @@
+.card-player {
+    width: 300px;
+    margin: 10px;
+    padding: 0;
+}
+
+.photo-player {
+    width: 30%;
+    height: 100px;
+    float: left;
+}
+
+.info-player {
+    width: 70%;
+    float: right;
+    text-align: right;
+}
+
+.info-player p {
+    margin-top: 0px;
+    margin-bottom: 10px;
+}
+
+.bold {
+    font-weight: bold;
+}
+
+.player-card-content {
+    overflow: hidden;
+    margin: 0;
+    padding: 10px 10px 0px 10px;
+}
+
+.btn-search {
+    margin-left: 10px;
+}

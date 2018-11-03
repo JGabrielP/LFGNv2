@@ -1,6 +1,6 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { FormControl, Validators, FormBuilder } from '@angular/forms';
-import { MatDialog, MatDialogRef, MAT_DIALOG_DATA, MatSnackBar } from '@angular/material';
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA, MatSnackBar, throwMatDialogContentAlreadyAttachedError } from '@angular/material';
 import { TeamService } from '../../services/team/team.service';
 import { Observable } from 'rxjs';
 import { Team } from '../../models/team/team';
@@ -69,7 +69,7 @@ export class TeamsComponent implements OnInit {
 @Component({
   selector: 'add-team-dialog',
   templateUrl: './dialogs/add-team-dialog.component.html',
-  styleUrls: ['/dialogs/add-team-dialog.component.css']
+  styleUrls: ['./dialogs/add-team-dialog.component.css']
 })
 export class AddTeamDialog {
 
@@ -132,11 +132,10 @@ export class AddTeamDialog {
 
   addPlayerList() {
     if (!this.playerCtrl.get('curpCtrl').hasError('required') && !this.playerCtrl.get('nameCtrl').hasError('required') && !this.playerCtrl.get('firstNameCtrl').hasError('required') && !this.playerCtrl.get('lastNameCtrl').hasError('required') && !this.playerCtrl.get('birthdateCtrl').hasError('required') && !this.playerCtrl.get('curpCtrl').hasError('minlength') && !this.playerCtrl.get('curpCtrl').hasError('exists')) {
-      let date = this.playerCtrl.get('birthdateCtrl').value.getDate() + "-" + (this.playerCtrl.get('birthdateCtrl').value.getMonth() + 1) + "-" + this.playerCtrl.get('birthdateCtrl').value.getFullYear();
       if (this.PhotoUrl == null)
-        this.players.push({ Id: this.playerCtrl.get('curpCtrl').value, Name: this.playerCtrl.get('nameCtrl').value, LastName: this.playerCtrl.get('lastNameCtrl').value, FirstName: this.playerCtrl.get('firstNameCtrl').value, BirthDate: date });
+        this.players.push({ Id: this.playerCtrl.get('curpCtrl').value, Name: this.playerCtrl.get('nameCtrl').value, LastName: this.playerCtrl.get('lastNameCtrl').value, FirstName: this.playerCtrl.get('firstNameCtrl').value, BirthDate: this.playerCtrl.get('birthdateCtrl').value.toLocaleDateString() });
       else
-        this.players.push({ Id: this.playerCtrl.get('curpCtrl').value, Name: this.playerCtrl.get('nameCtrl').value, LastName: this.playerCtrl.get('lastNameCtrl').value, FirstName: this.playerCtrl.get('firstNameCtrl').value, BirthDate: date, PhotoUrl: this.PhotoUrlBuffer, photoFile: this.PhotoUrl });
+        this.players.push({ Id: this.playerCtrl.get('curpCtrl').value, Name: this.playerCtrl.get('nameCtrl').value, LastName: this.playerCtrl.get('lastNameCtrl').value, FirstName: this.playerCtrl.get('firstNameCtrl').value, BirthDate: this.playerCtrl.get('birthdateCtrl').value.toLocaleDateString(), PhotoUrl: this.PhotoUrlBuffer, photoFile: this.PhotoUrl });
       this.playerCtrl.get('curpCtrl').setValue('');
       this.playerCtrl.get('nameCtrl').setValue('');
       this.playerCtrl.get('lastNameCtrl').setValue('');
