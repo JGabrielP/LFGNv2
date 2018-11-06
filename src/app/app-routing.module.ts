@@ -7,6 +7,7 @@ import { FieldsComponent } from './nav-lfgn/fields/fields.component';
 import { TeamsComponent } from './nav-lfgn/teams/teams.component';
 import { TeamDetailsComponent } from './nav-lfgn/teams/team-details/team-details.component';
 import { TranfersComponent } from './nav-lfgn/tranfers/tranfers.component';
+import { FinancesComponent } from './nav-lfgn/finances/finances.component';
 import { AuthGuard } from './services/guard/auth.guard';
 
 const routes: Routes = [
@@ -21,7 +22,8 @@ const routes: Routes = [
           { path: ':id', component: TeamDetailsComponent, canActivateChild: [AuthGuard] }
         ]
       },
-      { path: 'tranfers', component: TranfersComponent, canActivateChild: [AuthGuard] }
+      { path: 'tranfers', component: TranfersComponent, canActivateChild: [AuthGuard] },
+      { path: 'finances', component: FinancesComponent, canActivateChild: [AuthGuard] }
     ]
   },
   { path: 'auth', component: LoginComponent },

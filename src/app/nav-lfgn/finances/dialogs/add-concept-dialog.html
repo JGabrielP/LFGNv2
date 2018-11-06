@@ -1,0 +1,32 @@
+<form [formGroup]="financeCtrl">
+    <h1 mat-dialog-title>Nuevo concepto</h1>
+    <div mat-dialog-content>
+        <mat-form-field style="margin-right:10px;">
+            <input matInput [matDatepicker]="picker" placeholder="Fecha de operación" formControlName="dateCtrl"
+                required>
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+            <mat-error *ngIf="financeCtrl.controls['dateCtrl'].errors">Ingrese la fecha</mat-error>
+        </mat-form-field>
+        <mat-form-field>
+            <mat-select placeholder="Tipo" formControlName="typeCtrl" required>
+                <mat-option *ngFor="let type of types" [value]="type.value">
+                    {{type.viewValue}}
+                </mat-option>
+            </mat-select>
+            <mat-error *ngIf="financeCtrl.controls['typeCtrl'].errors">Ingrese un tipo</mat-error>
+        </mat-form-field><br>
+        <mat-form-field style="margin-right:10px;">
+            <textarea matInput placeholder="Descripción" formControlName="descriptionCtrl" required></textarea>
+            <mat-error *ngIf="financeCtrl.controls['descriptionCtrl'].errors">Ingrese una descripción</mat-error>
+        </mat-form-field>
+        <mat-form-field>
+            <input matInput type="number" placeholder="Monto" formControlName="amountCtrl" required>
+            <mat-error *ngIf="financeCtrl.controls['amountCtrl'].errors">Ingrese un valor</mat-error>
+        </mat-form-field>
+    </div>
+    <div mat-dialog-actions align="end">
+        <button mat-button (click)="onNoClick()">Cancelar</button>
+        <button mat-button cdkFocusInitial (click)="addConcept()">Agregar</button>
+    </div>
+</form>

@@ -18,6 +18,7 @@ import { FieldService } from './services/field/field.service';
 import { TeamService } from './services/team/team.service';
 import { PlayerService } from './services/player/player.service';
 import { TranferService } from './services/tranfer/tranfer.service';
+import { FinancesService } from './services/finances/finances.service';
 
 //ROUTINGS
 import { AppRoutingModule } from './app-routing.module';
@@ -31,6 +32,7 @@ import { FieldsComponent, AddFieldDialog, DeleteFieldDialog, EditFieldDialog } f
 import { TeamsComponent, AddTeamDialog, DeleteTeamDialog, EditTeamDialog } from './nav-lfgn/teams/teams.component';
 import { TeamDetailsComponent, AddPlayerDialog, DropPlayerDialog } from './nav-lfgn/teams/team-details/team-details.component';
 import { TranfersComponent, AddTranferDialog } from './nav-lfgn/tranfers/tranfers.component';
+import { FinancesComponent, AddConceptDialog } from './nav-lfgn/finances/finances.component';
 
 @NgModule({
   declarations: [
@@ -50,7 +52,9 @@ import { TranfersComponent, AddTranferDialog } from './nav-lfgn/tranfers/tranfer
     AddPlayerDialog,
     DropPlayerDialog,
     TranfersComponent,
-    AddTranferDialog
+    AddTranferDialog,
+    FinancesComponent,
+    AddConceptDialog
   ],
   imports: [
     BrowserModule,
@@ -63,8 +67,8 @@ import { TranfersComponent, AddTranferDialog } from './nav-lfgn/tranfers/tranfer
     MaterialModule,
     AppRoutingModule
   ],
-  entryComponents: [AddFieldDialog, DeleteFieldDialog, EditFieldDialog, AddTeamDialog, DeleteTeamDialog, EditTeamDialog, AddPlayerDialog, DropPlayerDialog, AddTranferDialog],
-  providers: [AuthService, AuthGuard, FieldService, TeamService, PlayerService, TranferService],
+  entryComponents: [AddFieldDialog, DeleteFieldDialog, EditFieldDialog, AddTeamDialog, DeleteTeamDialog, EditTeamDialog, AddPlayerDialog, DropPlayerDialog, AddTranferDialog, AddConceptDialog],
+  providers: [AuthService, AuthGuard, FieldService, TeamService, PlayerService, TranferService, FinancesService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
