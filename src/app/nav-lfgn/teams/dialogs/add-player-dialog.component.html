@@ -1,7 +1,6 @@
 <form [formGroup]="playerCtrl">
   <h1 mat-dialog-title>Registrar jugador</h1>
   <div mat-dialog-content>
-
     <ng-template matStepLabel>Alta de jugadores</ng-template>
     <mat-form-field class="spacer">
       <input matInput placeholder="CURP" formControlName="curpCtrl" required maxlength="18" minlength="18">
@@ -19,7 +18,7 @@
       <mat-icon>cloud_upload</mat-icon>
       <span> Fotografía...</span>
     </button>
-    <img id="logo-preview" [src]="PhotoUrlBuffer || 'http://placehold.it/40'">
+    <img id="logo-preview" [src]="PhotoBuffer || 'http://placehold.it/40'">
     <br>
     <mat-form-field class="spacer">
       <input matInput placeholder="Nombre(s)" formControlName="nameCtrl" required>
@@ -36,6 +35,6 @@
   </div>
   <mat-dialog-actions align="end">
     <button mat-button (click)="onNoClick()">Cancelar</button>
-    <button mat-button cdkFocusInitial (click)='add()'>Guardar</button>
+    <button mat-raised-button cdkFocusInitial (click)='add()' color="primary">Guardar</button>
   </mat-dialog-actions>
 </form>

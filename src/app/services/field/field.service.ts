@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/firestore';
-import { Observable} from 'rxjs';
+import { Observable } from 'rxjs';
 import { Field } from '../../models/field/field';
 
 @Injectable({
@@ -30,7 +30,13 @@ export class FieldService {
     return this.fieldsCollection.doc(field.Id).delete();
   }
 
-  get(){
+  get() {
     return this.fields;
+  }
+
+  async ifExists(id: string) {
+    const data = await this.fieldsCollection.ref.where('Name', '==', id).get();
+    if (data.size == 1)
+      return true;
   }
 }

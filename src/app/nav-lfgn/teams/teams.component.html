@@ -1,27 +1,32 @@
-<div>
-  <mat-card class="card" *ngFor="let team of teams | async">
-    <div class="header-card">
-      <div class="fabLogoTeam">
-        <img class="LogoTeam" [src]=" team.LogoUrl || '../../../assets/images/NoLogo.png' ">
+<div *ngIf="teams|async;let teams">
+  <div *ngIf="teams?.length > 0; else noTeams">
+    <mat-card class="card" *ngFor="let team of teams">
+      <div class="header-card">
+        <div class="fabLogoTeam">
+          <img class="LogoTeam" [src]=" team.LogoUrl || '../../../assets/images/NoLogo.png' ">
+        </div>
+        <img class="LogoLeague" src="../../../assets/images/LogoTeams.png">
       </div>
-      <img class="LogoLeague" src="../../../assets/images/LogoTeams.png">
-    </div>
-    <div class="body">
-      {{team.Name}}
-      <div class="buttons">
-        <button mat-icon-button matTooltip="Eliminar" (click)="openDeleteDialog(team)">
-          <mat-icon>delete</mat-icon>
-        </button>
-        <button mat-icon-button matTooltip="Editar" (click)="openEditDialog(team)">
-          <mat-icon>edit</mat-icon>
-        </button>
-        <button mat-icon-button matTooltip="Información" (click)="onInformation(team)">
-          <mat-icon>info</mat-icon>
-        </button>
+      <div class="body">
+        {{team.Name}}
+        <div class="buttons">
+          <button mat-icon-button matTooltip="Eliminar" (click)="openDeleteDialog(team)">
+            <mat-icon>delete</mat-icon>
+          </button>
+          <button mat-icon-button matTooltip="Editar" (click)="openEditDialog(team)">
+            <mat-icon>edit</mat-icon>
+          </button>
+          <button mat-icon-button matTooltip="Información" (click)="onInformation(team)">
+            <mat-icon>info</mat-icon>
+          </button>
+        </div>
       </div>
-    </div>
-  </mat-card>
+    </mat-card>
+  </div>
 </div>
+<ng-template #noTeams>
+  <div class="no-teams-label">No existen equipos registrados.</div>
+</ng-template>
 <button class="fab-button" mat-fab color="primary" matTooltip="Nuevo equipo" (click)="openAddDialog()">
   <mat-icon>add</mat-icon>
 </button>

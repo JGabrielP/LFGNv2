@@ -13,8 +13,8 @@
       <hr>
       <a class="link" routerLinkActive="active" mat-list-item><i class="material-icons md-light">event</i>Eventos
         especiales</a>
-      <a class="link" routerLinkActive="active" mat-list-item><i class="material-icons md-light">highlight</i>Torneos</a>
-      <a class="link" routerLinkActive="active" mat-list-item><i class="material-icons md-light">insert_chart_outlined</i>Estadísticas</a>
+      <a class="link" routerLinkActive="active" mat-list-item [routerLink]="['tournaments']"><i class="material-icons md-light">highlight</i>Torneos</a>
+      <a class="link" routerLinkActive="active" mat-list-item [routerLink]="['statistics']"><i class="material-icons md-light">insert_chart_outlined</i>Estadísticas</a>
       <a class="link" routerLinkActive="active" mat-list-item [routerLink]="['finances']"><i class="material-icons md-light">monetization_on</i>Finanzas</a>
     </mat-nav-list>
   </mat-sidenav>
@@ -25,7 +25,11 @@
       </button>
       <span>LFGN</span>
       <span class="example-spacer"></span>
-      <a id="guide" mat-icon-button matTooltip="Ir a documentación" href="https://docs.google.com/viewerng/viewer?url=http://victorpimentel.com/stuff/rubik.pdf"
+      <a id="guide" mat-icon-button matTooltip="Formato de inscripción" href="https://firebasestorage.googleapis.com/v0/b/ligafutbolgn.appspot.com/o/files%2FFormatoInscripcionFGN.pdf?alt=media&token=97b1c62e-f4b9-445c-851d-8dd5b1fbd244"
+        target="_blank">
+        <i class="material-icons">save_alt</i>
+      </a>
+      <a id="guide" mat-icon-button matTooltip="Ir a documentación" href="https://firebasestorage.googleapis.com/v0/b/ligafutbolgn.appspot.com/o/files%2FUser_Manual.pdf?alt=media&token=4bf2b181-d147-472a-84fa-2da030835138"
         target="_blank">
         <i class="material-icons">import_contacts</i>
       </a>

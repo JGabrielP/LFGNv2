@@ -2,6 +2,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { MaterialModule } from './material.module';
+import 'hammerjs';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 //FIREBASE
@@ -19,6 +20,9 @@ import { TeamService } from './services/team/team.service';
 import { PlayerService } from './services/player/player.service';
 import { TranferService } from './services/tranfer/tranfer.service';
 import { FinancesService } from './services/finances/finances.service';
+import { TournamentService } from './services/tournament/tournament.service';
+import { MatchService } from './services/match/match.service';
+import { StatisticsService } from './services/statistics/statistics.service';
 
 //ROUTINGS
 import { AppRoutingModule } from './app-routing.module';
@@ -30,9 +34,12 @@ import { NavLFGNComponent } from './nav-lfgn/nav-lfgn/nav-lfgn.component';
 import { NotFoundComponent } from './not-found/not-found.component';
 import { FieldsComponent, AddFieldDialog, DeleteFieldDialog, EditFieldDialog } from './nav-lfgn/fields/fields.component';
 import { TeamsComponent, AddTeamDialog, DeleteTeamDialog, EditTeamDialog } from './nav-lfgn/teams/teams.component';
-import { TeamDetailsComponent, AddPlayerDialog, DropPlayerDialog } from './nav-lfgn/teams/team-details/team-details.component';
+import { TeamDetailsComponent, AddPlayerDialog, DropPlayerDialog, EditPlayerDialog } from './nav-lfgn/teams/team-details/team-details.component';
 import { TranfersComponent, AddTranferDialog } from './nav-lfgn/tranfers/tranfers.component';
 import { FinancesComponent, AddConceptDialog } from './nav-lfgn/finances/finances.component';
+import { TournamentsComponent, AddTournamentDialog } from './nav-lfgn/tournaments/tournaments.component';
+import { TournamentsMatchDetailsComponent, FinishDefaultDialog } from './nav-lfgn/tournaments/tournaments-match-details/tournaments-match-details.component';
+import { StatisticsComponent } from './nav-lfgn/statistics/statistics.component';
 
 @NgModule({
   declarations: [
@@ -51,10 +58,16 @@ import { FinancesComponent, AddConceptDialog } from './nav-lfgn/finances/finance
     TeamDetailsComponent,
     AddPlayerDialog,
     DropPlayerDialog,
+    EditPlayerDialog,
     TranfersComponent,
     AddTranferDialog,
     FinancesComponent,
-    AddConceptDialog
+    AddConceptDialog,
+    TournamentsComponent,
+    AddTournamentDialog,
+    TournamentsMatchDetailsComponent,
+    FinishDefaultDialog,
+    StatisticsComponent
   ],
   imports: [
     BrowserModule,
@@ -67,8 +80,8 @@ import { FinancesComponent, AddConceptDialog } from './nav-lfgn/finances/finance
     MaterialModule,
     AppRoutingModule
   ],
-  entryComponents: [AddFieldDialog, DeleteFieldDialog, EditFieldDialog, AddTeamDialog, DeleteTeamDialog, EditTeamDialog, AddPlayerDialog, DropPlayerDialog, AddTranferDialog, AddConceptDialog],
-  providers: [AuthService, AuthGuard, FieldService, TeamService, PlayerService, TranferService, FinancesService],
+  entryComponents: [AddFieldDialog, DeleteFieldDialog, EditFieldDialog, AddTeamDialog, DeleteTeamDialog, EditTeamDialog, AddPlayerDialog, DropPlayerDialog, EditPlayerDialog, AddTranferDialog, AddConceptDialog, AddTournamentDialog, FinishDefaultDialog],
+  providers: [AuthService, AuthGuard, FieldService, TeamService, PlayerService, TranferService, FinancesService, TournamentService, MatchService, StatisticsService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

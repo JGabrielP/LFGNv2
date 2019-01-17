@@ -1,0 +1,215 @@
+<form [formGroup]="MatchCtrl">
+  <mat-card class="card-match-details">
+    <mat-card-header class="header-card" *ngIf="match | async; let matchs">
+      <div class="header-local" *ngFor="let local of teamLocal | async">
+        <div style="width:80%; float: left;">
+          <img class="logoUrl-header" [src]="local.LogoUrl || '../../../../../../assets/images/NoLogo.png'">
+          <p>{{local.Name}}</p>
+        </div>
+        <div *ngIf="matchs.Finished" class="goalLeft">{{matchs.GoalsLocal}}</div>
+      </div>
+      <div class="header-datetime">
+        <p>{{tournamentName}}</p>
+        <p>{{matchweekName}}</p>
+        <p>
+          <mat-icon style="margin-right:20px; vertical-align: middle;">schedule</mat-icon>
+          {{matchs.Date == null ? 'Sin definir' : matchs.Date.toDate().toLocaleDateString('es-ES',{ weekday:
+          'short', year: 'numeric', month: 'short', day: 'numeric', hour12: true, hour: 'numeric', minute:
+          '2-digit' })}}
+        </p>
+        <p>
+          <mat-icon style="margin-right:20px; vertical-align: middle;">pause_presentation</mat-icon>{{matchs.Field ==
+          null
+          ?
+          'Sin definir' : 'Campo ' + matchs.Field}}
+        </p>
+        <div style="margin-bottom:10px;">
+          <mat-slide-toggle *ngIf="!finalFinished; else elseFinished" (change)="onChange()" [formControl]="toggleCtrl">Finalizar
+            partido</mat-slide-toggle>
+          <ng-template #elseFinished>FINAL</ng-template>
+        </div>
+      </div>
+      <div class="header-visit" *ngFor="let visit of teamVisit | async">
+        <div style="width:80%; float: right;">
+          <img class="logoUrl-header" [src]="visit.LogoUrl || '../../../../../../assets/images/NoLogo.png'">
+          <p>{{visit.Name}}</p>
+        </div>
+        <div *ngIf="matchs.Finished" class="goalRight">{{matchs.GoalsVisit}}</div>
+      </div>
+    </mat-card-header>
+    <div *ngIf="match | async; let matchs">
+      <mat-card-content>
+        <mat-accordion class="example-headers-align">
+          <mat-expansion-panel *ngIf="!finalFinished">
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                Horario
+              </mat-panel-title>
+              <mat-panel-description>
+                Asignar fecha, hora y campo
+                <mat-icon>date_range</mat-icon>
+              </mat-panel-description>
+            </mat-expansion-panel-header>
+            <mat-form-field class="dateTime">
+              <input matInput [matDatepicker]="picker" placeholder="Fecha de partido" formControlName="matchDateCtrl"
+                required [value]="matchs.hasOwnProperty('Date') ? matchs.Date.toDate() : '' ">
+              <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+              <mat-datepicker #picker></mat-datepicker>
+              <mat-error *ngIf="MatchCtrl.get('matchDateCtrl').getError('required')">Debe seleccionar una fecha</mat-error>
+            </mat-form-field>
+            <mat-form-field class="dateTime">
+              <input matInput type="number" max="23" min="0" placeholder="Hora (24H)" [value]="matchs.hasOwnProperty('Date') ? matchs.Date.toDate().getHours() : '' "
+                formControlName="matchHourCtrl" required>
+              <mat-error *ngIf="MatchCtrl.get('matchHourCtrl').getError('required')">Debe introducir un valor</mat-error>
+            </mat-form-field>
+            <mat-form-field class="dateTime">
+              <input matInput type="number" max='59' min="0" placeholder="Minutos" [value]="matchs.hasOwnProperty('Date') ? matchs.Date.toDate().getMinutes(): '00' "
+                formControlName="matchMinutesCtrl" required>
+              <mat-error *ngIf="MatchCtrl.get('matchMinutesCtrl').getError('required')">Debe introducir un valor</mat-error>
+            </mat-form-field>
+            <mat-form-field>
+              <mat-select placeholder="Campo" formControlName="matchFieldCtrl" required>
+                <mat-option *ngFor="let field of fields | async" [value]="field.Name">
+                  {{field.Name}}
+                </mat-option>
+              </mat-select>
+              <mat-error *ngIf="MatchCtrl.get('matchFieldCtrl').getError('required')">Debe seleccionar una opción</mat-error>
+            </mat-form-field>
+            <mat-action-row>
+              <button mat-button color="primary" (click)='setMatch()'>Guardar</button>
+            </mat-action-row>
+          </mat-expansion-panel>
+          <mat-expansion-panel [disabled]="!expansionActive">
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                Final
+              </mat-panel-title>
+              <mat-panel-description>
+                Agregar resultado final
+                <mat-icon>check</mat-icon>
+              </mat-panel-description>
+            </mat-expansion-panel-header>
+            <mat-list>
+              <div>
+                <mat-list-item style="display:inline-block;">GOLEO</mat-list-item>
+                <img src="../../../../assets/images/Goals.png" width="20px" height="20px" style="display:inline;">
+                <mat-divider class="divider"></mat-divider>
+                <mat-form-field class="example-chip-list">
+                  <mat-chip-list #chipGoalsLocal>
+                    <mat-chip *ngFor="let playerGoalLocal of playersGoalLocal" [selectable]="selectable" [removable]="removable"
+                      (removed)="remove(playerGoalLocal.Id, 1)" [matTooltip]="playerGoalLocal.Folio">
+                      {{playerGoalLocal.Name + ' ' + playerGoalLocal.FirstName + ' ' + playerGoalLocal.LastName}}
+                      <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+                    </mat-chip>
+                    <input placeholder="Goles local..." #fruitInput [formControl]="goalsLocalCtrl" [matAutocomplete]="auto"
+                      [matChipInputFor]="chipGoalsLocal" [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                      [matChipInputAddOnBlur]="addOnBlur">
+                  </mat-chip-list>
+                  <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn" (optionSelected)="selected($event, 1)">
+                    <mat-option *ngFor="let goalPlayer of filteredGoalsLocal | async" [value]="goalPlayer">
+                      {{goalPlayer.Name + ' ' + goalPlayer.FirstName + ' ' + goalPlayer.LastName}}
+                    </mat-option>
+                  </mat-autocomplete>
+                </mat-form-field>
+                <mat-form-field class="example-chip-list">
+                  <mat-chip-list #chipGoalsVisit>
+                    <mat-chip *ngFor="let playerGoalVisit of playersGoalVisit" [selectable]="selectable" [removable]="removable"
+                      (removed)="remove(playerGoalVisit.Id, 2)" [matTooltip]="playerGoalVisit.Folio">
+                      {{playerGoalVisit.Name + ' ' + playerGoalVisit.FirstName + ' ' + playerGoalVisit.LastName}}
+                      <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+                    </mat-chip>
+                    <input placeholder="Goles visitante..." #VisitInput [formControl]="goalsVisitCtrl"
+                      [matAutocomplete]="autoVisit" [matChipInputFor]="chipGoalsVisit" [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                      [matChipInputAddOnBlur]="addOnBlur">
+                  </mat-chip-list>
+                  <mat-autocomplete #autoVisit="matAutocomplete" [displayWith]="displayFn" (optionSelected)="selected($event, 2)">
+                    <mat-option *ngFor="let goalPlayerVisit of filteredGoalsVisit | async" [value]="goalPlayerVisit">
+                      {{goalPlayerVisit.Name + ' ' + goalPlayerVisit.FirstName + ' ' + goalPlayerVisit.LastName}}
+                    </mat-option>
+                  </mat-autocomplete>
+                </mat-form-field>
+              </div>
+              <div>
+                <mat-list-item style="display:inline-block;">DISCIPLINARIA</mat-list-item>
+                <img src="../../../../assets/images/Cards.png" width="20px" height="20px" style="display:inline;">
+                <mat-divider class="divider"></mat-divider>
+                <mat-form-field class="example-chip-list">
+                  <mat-chip-list #chipYCardLocal>
+                    <mat-chip *ngFor="let playerCardYLocal of playerscardYLocal" [selectable]="selectable" [removable]="removable"
+                      (removed)="remove(playerCardYLocal, 3)" [matTooltip]="playerCardYLocal.Folio">
+                      {{playerCardYLocal.Name + ' ' + playerCardYLocal.FirstName + ' ' + playerCardYLocal.LastName}}
+                      <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+                    </mat-chip>
+                    <input placeholder="Amonestaciones local..." #YLocalInput [formControl]="cardYLocalCtrl"
+                      [matAutocomplete]="autoYLocal" [matChipInputFor]="chipYCardLocal" [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                      [matChipInputAddOnBlur]="addOnBlur">
+                  </mat-chip-list>
+                  <mat-autocomplete #autoYLocal="matAutocomplete" [displayWith]="displayFn" (optionSelected)="selected($event, 3)">
+                    <mat-option *ngFor="let cardYPlayerLocal of filteredcardYLocal | async" [value]="cardYPlayerLocal">
+                      {{cardYPlayerLocal.Name + ' ' + cardYPlayerLocal.FirstName + ' ' + cardYPlayerLocal.LastName}}
+                    </mat-option>
+                  </mat-autocomplete>
+                </mat-form-field>
+                <mat-form-field class="example-chip-list">
+                  <mat-chip-list #chipYCardVisit>
+                    <mat-chip *ngFor="let playerCardYVisit of playerscardYVisit" [selectable]="selectable" [removable]="removable"
+                      (removed)="remove(playerCardYVisit, 4)" [matTooltip]="playerCardYVisit.Folio">
+                      {{playerCardYVisit.Name + ' ' + playerCardYVisit.FirstName + ' ' + playerCardYVisit.LastName}}
+                      <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+                    </mat-chip>
+                    <input placeholder="Amonestaciones visitante..." #YVisitInput [formControl]="cardYVisitCtrl"
+                      [matAutocomplete]="autoYVisit" [matChipInputFor]="chipYCardVisit" [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                      [matChipInputAddOnBlur]="addOnBlur">
+                  </mat-chip-list>
+                  <mat-autocomplete #autoYVisit="matAutocomplete" [displayWith]="displayFn" (optionSelected)="selected($event, 4)">
+                    <mat-option *ngFor="let cardYPlayerVisit of filteredcardYVisit | async" [value]="cardYPlayerVisit">
+                      {{cardYPlayerVisit.Name + ' ' + cardYPlayerVisit.FirstName + ' ' + cardYPlayerVisit.LastName}}
+                    </mat-option>
+                  </mat-autocomplete>
+                </mat-form-field>
+                <mat-form-field class="example-chip-list">
+                  <mat-chip-list #chipRCardLocal>
+                    <mat-chip *ngFor="let playerCardRLocal of playerscardRLocal" [selectable]="selectable" [removable]="removable"
+                      (removed)="remove(playerCardRLocal, 5)" [matTooltip]="playerCardRLocal.Folio">
+                      {{playerCardRLocal.Name + ' ' + playerCardRLocal.FirstName + ' ' + playerCardRLocal.LastName}}
+                      <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+                    </mat-chip>
+                    <input placeholder="Expulsiones local..." #RLocalInput [formControl]="cardRLocalCtrl"
+                      [matAutocomplete]="autoRLocal" [matChipInputFor]="chipRCardLocal" [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                      [matChipInputAddOnBlur]="addOnBlur">
+                  </mat-chip-list>
+                  <mat-autocomplete #autoRLocal="matAutocomplete" [displayWith]="displayFn" (optionSelected)="selected($event, 5)">
+                    <mat-option *ngFor="let cardRPlayerLocal of filteredcardRLocal | async" [value]="cardRPlayerLocal">
+                      {{cardRPlayerLocal.Name + ' ' + cardRPlayerLocal.FirstName + ' ' + cardRPlayerLocal.LastName}}
+                    </mat-option>
+                  </mat-autocomplete>
+                </mat-form-field>
+                <mat-form-field class="example-chip-list">
+                  <mat-chip-list #chipRCardVisit>
+                    <mat-chip *ngFor="let playerCardRVisit of playerscardRVisit" [selectable]="selectable" [removable]="removable"
+                      (removed)="remove(playerCardRVisit, 6)" [matTooltip]="playerCardRVisit.Folio">
+                      {{playerCardRVisit.Name + ' ' + playerCardRVisit.FirstName + ' ' + playerCardRVisit.LastName}}
+                      <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+                    </mat-chip>
+                    <input placeholder="Expulsiones visitante..." #RVisitInput [formControl]="cardRVisitCtrl"
+                      [matAutocomplete]="autoRVisit" [matChipInputFor]="chipRCardVisit" [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                      [matChipInputAddOnBlur]="addOnBlur">
+                  </mat-chip-list>
+                  <mat-autocomplete #autoRVisit="matAutocomplete" [displayWith]="displayFn" (optionSelected)="selected($event, 6)">
+                    <mat-option *ngFor="let cardRPlayerVisit of filteredcardRVisit | async" [value]="cardRPlayerVisit">
+                      {{cardRPlayerVisit.Name + ' ' + cardRPlayerVisit.FirstName + ' ' + cardRPlayerVisit.LastName}}
+                    </mat-option>
+                  </mat-autocomplete>
+                </mat-form-field>
+              </div>
+            </mat-list>
+            <mat-action-row>
+              <button mat-button color="warn" (click)='openFinishDefaultDialog()'>Terminar por default</button>
+              <button mat-button color="primary" (click)='setResult()'>Guardar</button>
+            </mat-action-row>
+          </mat-expansion-panel>
+        </mat-accordion>
+      </mat-card-content>
+    </div>
+  </mat-card>
+</form>

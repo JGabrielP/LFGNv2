@@ -1,0 +1,32 @@
+<form [formGroup]="tournamentCtrl">
+    <h1 mat-dialog-title>Nuevo torneo de liga</h1>
+    <div mat-dialog-content>
+        <mat-form-field>
+            <input matInput placeholder="Nombre del torneo" formControlName="nameCtrl">
+            <mat-error *ngIf="tournamentCtrl.controls['nameCtrl'].errors">Ingrese un valor</mat-error>
+        </mat-form-field>
+        <mat-form-field>
+            <mat-select placeholder="Número de vueltas" [(value)]="Nvueltas" formControlName="nVueltasCtrl">
+                <mat-option value="1">Uno</mat-option>
+                <mat-option value="2">Doble</mat-option>
+            </mat-select>
+            <mat-error *ngIf="tournamentCtrl.controls['nVueltasCtrl'].errors">Seleccione una opción</mat-error>
+        </mat-form-field><br>
+        <mat-form-field>
+            <mat-select placeholder="No. equipos a clasificar" [(value)]="Nteams" formControlName="nTeamsCtrl">
+                <mat-option value="2">2</mat-option>
+                <mat-option value="4">4</mat-option>
+                <mat-option value="8">8</mat-option>
+            </mat-select>
+            <mat-error *ngIf="tournamentCtrl.controls['nTeamsCtrl'].errors">Seleccione una opción</mat-error>
+        </mat-form-field>
+        <mat-form-field>
+            <input type="number" min="0" matInput placeholder="Límite tarjetas amarillas acumuladas" formControlName="nCardsCtrl">
+            <mat-error *ngIf="tournamentCtrl.controls['nCardsCtrl'].errors">Ingrese un valor</mat-error>
+        </mat-form-field>
+    </div>
+    <div mat-dialog-actions align='end'>
+        <button mat-button (click)="onNoClick()">Cancelar</button>
+        <button mat-button cdkFocusInitial (click)='add()'>Generar</button>
+    </div>
+</form>

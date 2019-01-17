@@ -1,0 +1,109 @@
+<div class="body">
+  <mat-form-field class="select-tournaments">
+    <mat-select placeholder="Torneo" (selectionChange)="getLeaderboard($event.value)" [(value)]="currentTournament">
+      <mat-option *ngFor="let tournament of tournaments | async" [value]="tournament.Name">
+        {{tournament.Name}}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+  <p>TABLA GENERAL</p>
+  <mat-divider></mat-divider>
+  <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8">
+
+    <ng-container matColumnDef="pos">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> POS </th>
+      <td mat-cell *matCellDef="let element"> {{element.pos}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="img">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header></th>
+      <td mat-cell *matCellDef="let element">
+        <img class="logo-team" [src]=" element.team.LogoUrl || '../../../assets/images/NoLogo.png' ">
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="name">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> NOMBRE </th>
+      <td mat-cell *matCellDef="let element"> {{element.team.Name}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="pts">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> PTS </th>
+      <td class="bold" mat-cell *matCellDef="let element"> {{element.pts}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="jj">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> JJ </th>
+      <td mat-cell *matCellDef="let element"> {{element.jj}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="dg">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> DG </th>
+      <td mat-cell *matCellDef="let element"> {{element.dg}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="jg">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> JG </th>
+      <td mat-cell *matCellDef="let element"> {{element.jg}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="je">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> JE </th>
+      <td mat-cell *matCellDef="let element"> {{element.je}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="jp">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> JP </th>
+      <td mat-cell *matCellDef="let element"> {{element.jp}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="gf">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> GF </th>
+      <td mat-cell *matCellDef="let element"> {{element.gf}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="gc">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> GC </th>
+      <td mat-cell *matCellDef="let element"> {{element.gc}} </td>
+    </ng-container>
+
+    <tr class="header" mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr class="example-element-row" mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+  <p>TABLA DE GOLEO</p>
+  <mat-divider></mat-divider>
+  <table mat-table [dataSource]="dataSourceLeadergoal" matSort class="mat-elevation-z8">
+
+    <ng-container matColumnDef="pos">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> POS </th>
+      <td mat-cell *matCellDef="let element"> {{element.pos}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="img">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header></th>
+      <td mat-cell *matCellDef="let element">
+        <img class="logo-team" [src]=" element.Team.LogoUrl || '../../../assets/images/NoLogo.png' " [matTooltip]="element.Team.Name">
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="photo">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header></th>
+      <td mat-cell *matCellDef="let element">
+        <img class="photo-player" [src]=" element.Player.PhotoUrl || '../../../assets/images/NoPhotoPlayer.png' ">
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="name">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> NOMBRE </th>
+      <td mat-cell *matCellDef="let element"> {{element.Player.Name + ' ' + element.Player.FirstName + ' ' + element.Player.LastName}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="ngoals">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> GOLES </th>
+      <td class="bold" mat-cell *matCellDef="let element"> {{element.nGoals}} </td>
+    </ng-container>
+
+    <tr class="header" mat-header-row *matHeaderRowDef="displayedColumnsLeadergoal"></tr>
+    <tr class="example-element-row" mat-row *matRowDef="let row; columns: displayedColumnsLeadergoal;"></tr>
+  </table>
+</div>

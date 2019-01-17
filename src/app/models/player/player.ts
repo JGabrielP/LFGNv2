@@ -1,9 +1,12 @@
+import { Team } from "../team/team";
+
 export interface Player {
     Id: string,
     Name: string,
     FirstName: string,
     LastName: string,
-    BirthDate: string,
+    BirthDate: Date,
     PhotoUrl?: string,
-    Team?: string
+    Team: Team,
+    Folio: number;
 }

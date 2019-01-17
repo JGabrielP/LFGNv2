@@ -8,6 +8,9 @@ import { TeamsComponent } from './nav-lfgn/teams/teams.component';
 import { TeamDetailsComponent } from './nav-lfgn/teams/team-details/team-details.component';
 import { TranfersComponent } from './nav-lfgn/tranfers/tranfers.component';
 import { FinancesComponent } from './nav-lfgn/finances/finances.component';
+import { TournamentsComponent } from './nav-lfgn/tournaments/tournaments.component';
+import { TournamentsMatchDetailsComponent } from './nav-lfgn/tournaments/tournaments-match-details/tournaments-match-details.component';
+import { StatisticsComponent } from './nav-lfgn/statistics/statistics.component';
 import { AuthGuard } from './services/guard/auth.guard';
 
 const routes: Routes = [
@@ -23,7 +26,14 @@ const routes: Routes = [
         ]
       },
       { path: 'tranfers', component: TranfersComponent, canActivateChild: [AuthGuard] },
-      { path: 'finances', component: FinancesComponent, canActivateChild: [AuthGuard] }
+      { path: 'finances', component: FinancesComponent, canActivateChild: [AuthGuard] },
+      {
+        path: 'tournaments', children: [
+          { path: '', component: TournamentsComponent, canActivateChild: [AuthGuard] },
+          { path: 'matchDetail', component: TournamentsMatchDetailsComponent, canActivateChild: [AuthGuard] }
+        ]
+      },
+      { path: 'statistics', component: StatisticsComponent, canActivateChild: [AuthGuard] }
     ]
   },
   { path: 'auth', component: LoginComponent },

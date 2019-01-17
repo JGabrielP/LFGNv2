@@ -12,11 +12,11 @@ import { Observable } from 'rxjs';
 })
 export class FinancesComponent implements OnInit {
 
-  finances: Observable<Finance[]>;
-  total: number;
-  displayedColumns: string[] = ['select', 'date', 'description', 'amount'];
+  public finances: Observable<Finance[]>;
+  public total: number;
+  public displayedColumns: string[] = ['select', 'date', 'description', 'amount'];
 
-  constructor(public financeService: FinancesService, public dialog: MatDialog, public snackBar: MatSnackBar) { }
+  constructor(private financeService: FinancesService, private dialog: MatDialog, private snackBar: MatSnackBar) { }
 
   ngOnInit() {
     this.finances = this.financeService.get();
@@ -50,18 +50,18 @@ export class FinancesComponent implements OnInit {
 })
 export class AddConceptDialog {
 
-  types: {} = [
+  public types: {} = [
     { value: 'black', viewValue: 'Ingreso (+)' },
     { value: 'red', viewValue: 'Egreso (-)' }
   ];
-  financeCtrl = this._formBuilder.group({
+  public financeCtrl = this._formBuilder.group({
     dateCtrl: ['', Validators.required],
     descriptionCtrl: ['', Validators.required],
     amountCtrl: ['', Validators.required],
     typeCtrl: ['', Validators.required]
   });
 
-  constructor(public dialogRef: MatDialogRef<AddConceptDialog>, public financeService: FinancesService, private _formBuilder: FormBuilder) { }
+  constructor(private dialogRef: MatDialogRef<AddConceptDialog>, private financeService: FinancesService, private _formBuilder: FormBuilder) { }
 
   onNoClick(): void {
     this.dialogRef.close();
@@ -72,7 +72,7 @@ export class AddConceptDialog {
       let amount: number = this.financeCtrl.controls['amountCtrl'].value;
       if (!this.financeCtrl.controls['typeCtrl'].value.localeCompare('red'))
         amount = -Math.abs(this.financeCtrl.controls['amountCtrl'].value);
-      await this.financeService.add({ Date: this.financeCtrl.controls['dateCtrl'].value.toLocaleDateString(), Description: this.financeCtrl.controls['descriptionCtrl'].value, Amount: amount, Type: this.financeCtrl.controls['typeCtrl'].value });
+      await this.financeService.add({ Date: this.financeCtrl.controls['dateCtrl'].value, Description: this.financeCtrl.controls['descriptionCtrl'].value, Amount: amount, Type: this.financeCtrl.controls['typeCtrl'].value });
       this.dialogRef.close('Ok');
     }
   }

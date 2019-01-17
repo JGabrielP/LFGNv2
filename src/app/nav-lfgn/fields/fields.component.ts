@@ -3,7 +3,7 @@ import { Observable } from 'rxjs';
 import { Field } from '../../models/field/field';
 import { FieldService } from '../../services/field/field.service';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA, MatSnackBar } from '@angular/material';
-import { FormControl, Validators } from '@angular/forms';
+import { FormControl, Validators, FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-fields',
@@ -12,10 +12,9 @@ import { FormControl, Validators } from '@angular/forms';
 })
 export class FieldsComponent implements OnInit {
 
-  fields: Observable<Field[]>;
+  public fields: Observable<Field[]>;
 
-  constructor(private fieldService: FieldService, private dialog: MatDialog, public snackBar: MatSnackBar) {
-  }
+  constructor(private fieldService: FieldService, private dialog: MatDialog, private snackBar: MatSnackBar) { }
 
   ngOnInit() {
     this.fields = this.fieldService.get();
@@ -32,8 +31,10 @@ export class FieldsComponent implements OnInit {
   openDeleteDialog(field: Field): void {
     const dialogRef = this.dialog.open(DeleteFieldDialog, { data: field });
     dialogRef.afterClosed().subscribe(result => {
-      if (result != null)
+      if (result != null) {
+        this.openSnackbar("Eliminando...");
         this.fieldService.delete(result).then(() => this.openSnackbar("Campo eliminado correctamente."));
+      }
     });
   }
 
@@ -50,7 +51,6 @@ export class FieldsComponent implements OnInit {
       duration: 3000,
     });
   }
-
 }
 
 @Component({
@@ -59,21 +59,36 @@ export class FieldsComponent implements OnInit {
 })
 export class AddFieldDialog {
 
-  nameField = new FormControl('', [Validators.required]);
+  public formAdd = new FormGroup({
+    nameField: new FormControl('', [Validators.required], this.ifFieldExists.bind(this))
+  });
 
-  constructor(public dialogRef: MatDialogRef<AddFieldDialog>) { }
+  constructor(private dialogRef: MatDialogRef<AddFieldDialog>, private fieldService: FieldService, private snackBar: MatSnackBar) { }
 
   private getErrorMessage() {
-    return this.nameField.hasError('required') ? 'Debe introducir un valor' : ''
+    return this.formAdd.controls['nameField'].hasError('required') ? 'Debe introducir un valor' :
+      this.formAdd.controls['nameField'].hasError('exists') ? 'Campo ya registrado' : ''
   }
 
   add() {
-    if (!this.nameField.hasError('required'))
-      this.dialogRef.close({ Name: this.nameField.value })
+    if (this.formAdd.valid) {
+      this.openSnackbar("Guardando información...");
+      this.dialogRef.close({ Name: this.formAdd.controls['nameField'].value });
+    }
   }
 
   onNoClick(): void {
     this.dialogRef.close(null);
+  }
+
+  async ifFieldExists() {
+    const res = await this.fieldService.ifExists(this.formAdd.controls['nameField'].value);
+    if (res)
+      return { exists: true };
+  }
+
+  private openSnackbar(message: string) {
+    this.snackBar.open(message, "Espere");
   }
 }
 
@@ -83,7 +98,7 @@ export class AddFieldDialog {
 })
 export class DeleteFieldDialog {
 
-  constructor(public dialogRef: MatDialogRef<DeleteFieldDialog>, @Inject(MAT_DIALOG_DATA) public data: Field) { }
+  constructor(private dialogRef: MatDialogRef<DeleteFieldDialog>, @Inject(MAT_DIALOG_DATA) private data: Field) { }
 
   onNoClick(): void {
     this.dialogRef.close(null);
@@ -96,20 +111,36 @@ export class DeleteFieldDialog {
 })
 export class EditFieldDialog {
 
-  nameField = new FormControl('', [Validators.required]);
+  public formEdit = new FormGroup({
+    nameField: new FormControl('', [Validators.required], this.ifFieldExists.bind(this))
+  });
 
-  constructor(public dialogRef: MatDialogRef<EditFieldDialog>, @Inject(MAT_DIALOG_DATA) public data: Field) { }
+  constructor(private dialogRef: MatDialogRef<EditFieldDialog>, @Inject(MAT_DIALOG_DATA) private data: Field, private fieldService: FieldService, private snackBar: MatSnackBar) { }
 
   private getErrorMessage() {
-    return this.nameField.hasError('required') ? 'Debe introducir un valor' : ''
+    return this.formEdit.controls['nameField'].hasError('required') ? 'Debe introducir un valor' :
+      this.formEdit.controls['nameField'].hasError('exists') ? 'Campo ya registrado' : ''
   }
 
   edit() {
-    if (!this.nameField.hasError('required'))
-      this.dialogRef.close({ Id: this.data.Id, Name: this.nameField.value })
+    if (this.formEdit.valid) {
+      this.openSnackbar("Guardando información...");
+      this.data.Name = this.formEdit.controls['nameField'].value;
+      this.dialogRef.close(this.data);
+    }
   }
 
   onNoClick(): void {
     this.dialogRef.close(null);
+  }
+
+  async ifFieldExists() {
+    const res = await this.fieldService.ifExists(this.formEdit.controls['nameField'].value);
+    if (res)
+      return { exists: true };
+  }
+
+  private openSnackbar(message: string) {
+    this.snackBar.open(message, "Espere");
   }
 }

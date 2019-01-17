@@ -8,13 +8,14 @@
         </mat-form-field>
         <button class="btn-search" mat-button (click)="searchPlayer()">Buscar</button>
     </form>
-    <mat-card class="card-player" *ngFor="let play of player | async">
+    <mat-card class="card-player" *ngFor="let play of player">
         <mat-card-content class="player-card-content">
             <img class="photo-player" [src]="play.PhotoUrl || '../../../../../../assets/images/NoPhotoPlayer.png'">
             <div class="info-player">
                 <p>{{play.Name}}</p>
                 <p>{{play.FirstName}} {{play.LastName}}</p>
-                <p>{{play.BirthDate}}</p>
+                <p>{{play.BirthDate.toDate().toLocaleDateString('es-ES',{ year: 'numeric', month: 'long', day:
+                    'numeric'})}}</p>
                 <p class="bold">{{play.Id}}</p>
             </div>
         </mat-card-content>

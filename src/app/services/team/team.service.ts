@@ -10,7 +10,6 @@ import { AngularFireStorage } from '@angular/fire/storage';
 export class TeamService {
 
   public teamsCollection: AngularFirestoreCollection<Team>;
-  public teamsCollectionQuery: AngularFirestoreCollection<Team>;
   public teams: Observable<Team[]>;
 
   constructor(private afs: AngularFirestore, private fireStorage: AngularFireStorage) {
@@ -18,37 +17,81 @@ export class TeamService {
     this.teams = this.teamsCollection.valueChanges();
   }
 
-  add(team: Team) {
-    return this.teamsCollection.doc(team.Id).set(team);
+  async add(team: Team, logoFile: File) {
+    const id = this.afs.createId();
+    team.Id = id;
+    if (logoFile != null) {
+      const uploadLogo = await this.setLogo(logoFile, team.Id);
+      await uploadLogo.task.snapshot.ref.getDownloadURL().then(async logoUrl => {
+        team.LogoUrl = logoUrl;
+        await this.teamsCollection.doc(team.Id).set(team);
+      });
+    } else
+      await this.teamsCollection.doc(team.Id).set(team);
+    return team.Id;
   }
 
-  edit(team: Team) {
-    if (team.hasOwnProperty('LogoUrl'))
-      return this.teamsCollection.doc(team.Id).update({ Name: team.Name, LogoUrl: team.LogoUrl });
-    else
-      return this.teamsCollection.doc(team.Id).update({ Name: team.Name });
+  async edit(team: Team) {
+    await this.teamsCollection.doc(team.Id).update(team);
+    return;
+    /*await this.afs.collection("tranfers").ref.where('TeamSource.Id', '==', team.Id).get().then(querySnapshot => {
+      querySnapshot.forEach(doc => {
+        var cityRef = this.afs.collection("tranfers").doc(doc.id);
+        return cityRef.update({
+          'TeamSource.Name': team.Name,
+          'TeamSource.LogoUrl': team.LogoUrl
+        });
+      });
+    });
+
+    await this.afs.collection("tranfers").ref.where('TeamDestin.Id', '==', team.Id).get().then(querySnapshot => {
+      querySnapshot.forEach(doc => {
+        var cityRef = this.afs.collection("tranfers").doc(doc.id);
+        return cityRef.update({
+          'TeamDestin.Name': team.Name,
+          'TeamDestin.LogoUrl': team.LogoUrl
+        });
+      });
+    });*/
   }
 
   async delete(team: Team) {
     await this.teamsCollection.doc(team.Id).delete();
-    return this.removeLogo(team);
+    this.removeLogo(team);
+    return;
+    /*await this.afs.collection("tranfers").ref.where('TeamSource.Id', '==', team.Id).get().then(querySnapshot => {
+      querySnapshot.forEach(doc => {
+        var cityRef = this.afs.collection("tranfers").doc(doc.id);
+        return cityRef.update({
+          'TeamSource.LogoUrl': ''
+        });
+      });
+    });
+
+    await this.afs.collection("tranfers").ref.where('TeamDestin.Id', '==', team.Id).get().then(querySnapshot => {
+      querySnapshot.forEach(doc => {
+        var cityRef = this.afs.collection("tranfers").doc(doc.id);
+        return cityRef.update({
+          'TeamDestin.LogoUrl': ''
+        });
+      });
+    });*/
   }
 
   get() {
     return this.teams;
   }
 
-  getTeam(id: any) {
-    this.teamsCollectionQuery = this.afs.collection('teams', ref => ref.where('Id', '==', id));
-    return this.teamsCollectionQuery.valueChanges();
+  getTeam(idTeam: string) {
+    return this.afs.collection('teams', ref => ref.where('Id', '==', idTeam)).valueChanges();
   }
 
-  setLogo(file: File, id: string) {
-    return this.fireStorage.ref('teams/' + id).put(file);
+  setLogo(logoFile: File, idTeam: string) {
+    return this.fireStorage.ref('teams/' + idTeam).put(logoFile);
   }
 
   removeLogo(team: Team) {
-    if (team.hasOwnProperty('LogoUrl'))
+    if (team.LogoUrl.localeCompare(''))
       return this.fireStorage.ref('teams/' + team.Id).delete();
   }
 

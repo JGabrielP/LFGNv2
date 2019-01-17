@@ -1,0 +1,38 @@
+<form [formGroup]="playerCtrl">
+  <h1 mat-dialog-title>Editar información de jugador</h1>
+  <div mat-dialog-content>
+    <mat-form-field style="margin-right: 10px;">
+      <input matInput placeholder="CURP" formControlName="curpCtrl" required maxlength="18" minlength="18">
+      <mat-error *ngIf="playerCtrl.controls['curpCtrl'].errors">{{getErrorMessage()}}</mat-error>
+    </mat-form-field>
+    <mat-form-field style="margin-right: 10px;">
+      <input matInput [matDatepicker]="picker" placeholder="Fecha de nacimiento" formControlName="birthdateCtrl"
+        required>
+      <mat-error *ngIf="playerCtrl.controls['birthdateCtrl'].errors">Debe introducir un valor</mat-error>
+      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker #picker></mat-datepicker>
+    </mat-form-field>
+    <input id="inputLogo" style="display: none;" type="file" (change)="setLogo($event)" accept="image/*">
+    <button style="margin-left: 10px;" mat-button onclick="document.getElementById('inputLogo').click()">
+      <mat-icon>cloud_upload</mat-icon>
+      <span>Logotipo...</span>
+    </button>
+    <img style="width:40px;height: 40px; margin-left: 10px;" [src]="LogoBuffer || 'http://placehold.it/40'"><br>
+    <mat-form-field style="margin-right: 10px;">
+      <input matInput placeholder="Nombre(s)" formControlName="nameCtrl" required>
+      <mat-error *ngIf="playerCtrl.controls['nameCtrl'].errors">Debe introducir un valor</mat-error>
+    </mat-form-field>
+    <mat-form-field style="margin-right: 10px;">
+      <input matInput placeholder="Apellido paterno" formControlName="firstNameCtrl" required>
+      <mat-error *ngIf="playerCtrl.controls['firstNameCtrl'].errors">Debe introducir un valor</mat-error>
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput placeholder="Apellido materno" formControlName="lastNameCtrl" required>
+      <mat-error *ngIf="playerCtrl.controls['lastNameCtrl'].errors">Debe introducir un valor</mat-error>
+    </mat-form-field>
+  </div>
+  <div mat-dialog-actions align="end">
+    <button mat-raised-button (click)="onNoClick()">Cancelar</button>
+    <button mat-raised-button (click)="edit()" color="primary" cdkFocusInitial>Editar</button>
+  </div>
+</form>

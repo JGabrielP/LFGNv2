@@ -1,5 +1,5 @@
 export interface Finance {
-    Date: string,
+    Date: Date,
     Description: string,
     Amount: number,
     Type: string

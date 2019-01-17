@@ -17,7 +17,7 @@ export class FinancesService {
   }
 
   get() {
-    this.financesCollection = this.afs.collection('finances');
+    this.financesCollection = this.afs.collection('finances', ref => ref.orderBy('Date'));
     return this.financesCollection.valueChanges();
   }
 

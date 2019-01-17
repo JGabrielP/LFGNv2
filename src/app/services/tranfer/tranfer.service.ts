@@ -17,7 +17,7 @@ export class TranferService {
   }
 
   get() {
-    return this.afs.collection('tranfers').get();
+    return this.tranfers;
   }
 
   set(tranfer: Tranfer) {

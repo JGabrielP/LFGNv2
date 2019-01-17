@@ -1,18 +1,25 @@
 <div class="body">
-  <mat-card class="card" *ngFor="let field of fields | async">
-    <img class="LogoTeam" src="../../../assets/images/field.png" width="200px">
-    <span class="name">{{field.Name}}</span>
-    <div style="background-color: rgb(63, 81, 181);">
-      <div class="icon">
-        <button mat-icon-button matTooltip="Eliminar" (click)="openDeleteDialog(field)">
-          <mat-icon>delete</mat-icon>
-        </button>
-        <button mat-icon-button matTooltip="Editar" (click)="openEditDialog(field)">
-          <mat-icon>edit</mat-icon>
-        </button>
-      </div>
+  <div *ngIf="fields|async;let fields">
+    <div *ngIf="fields?.length > 0; else noFields">
+      <mat-card class="card" *ngFor="let field of fields">
+        <img class="LogoTeam" src="../../../assets/images/field.png" width="200px">
+        <span class="name">{{field.Name}}</span>
+        <div class="icons">
+          <div class="icon">
+            <button mat-icon-button matTooltip="Eliminar" (click)="openDeleteDialog(field)">
+              <mat-icon>delete</mat-icon>
+            </button>
+            <button mat-icon-button matTooltip="Editar" (click)="openEditDialog(field)">
+              <mat-icon>edit</mat-icon>
+            </button>
+          </div>
+        </div>
+      </mat-card>
     </div>
-  </mat-card>
+  </div>
+  <ng-template #noFields>
+    <div class="no-fields-label">No existen campos registrados.</div>
+  </ng-template>
   <button class="fab-button" mat-fab color="primary" matTooltip="Nuevo campo" (click)="openAddDialog()">
     <mat-icon>add</mat-icon>
   </button>

@@ -13,7 +13,7 @@
           <mat-icon>cloud_upload</mat-icon>
           <span> Logotipo...</span>
         </button>
-        <img id="logo-preview" [src]="LogoUrlBuffer || 'http://placehold.it/40'">
+        <img id="logo-preview" [src]="LogoBuffer || 'http://placehold.it/40'">
         <mat-dialog-actions align="end">
           <button mat-button (click)="onNoClick()">Cancelar</button>
           <button mat-button matStepperNext>Siguiente</button>
@@ -39,7 +39,7 @@
           <mat-icon>cloud_upload</mat-icon>
           <span> Fotografía...</span>
         </button>
-        <img id="logo-preview" [src]="PhotoUrlBuffer || 'http://placehold.it/40'">
+        <img id="logo-preview" [src]="PhotoBuffer || 'http://placehold.it/40'">
         <br>
         <mat-form-field class="spacer">
           <input matInput placeholder="Nombre(s)" formControlName="nameCtrl" required>

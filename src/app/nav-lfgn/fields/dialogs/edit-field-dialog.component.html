@@ -1,11 +1,13 @@
-<h1 mat-dialog-title>Editar campo</h1>
-<div mat-dialog-content>
-  <mat-form-field>
-    <input matInput placeholder="Nombre" value="{{data.Name}}" [formControl]="nameField" required autofocus>
-    <mat-error *ngIf="nameField.invalid">{{getErrorMessage()}}</mat-error>
-  </mat-form-field>
-</div>
-<div mat-dialog-actions>
-  <button mat-raised-button (click)="onNoClick()">Cancelar</button>
-  <button mat-raised-button (click)="edit()" color="primary">Editar</button>
-</div>
+<form [formGroup]="formEdit" (ngSubmit)="edit()">
+  <h1 mat-dialog-title>Editar campo</h1>
+  <div mat-dialog-content>
+    <mat-form-field>
+      <input matInput placeholder="Nombre" value="{{data.Name}}" formControlName="nameField" required autofocus>
+      <mat-error *ngIf="formEdit.invalid">{{getErrorMessage()}}</mat-error>
+    </mat-form-field>
+  </div>
+  <div mat-dialog-actions>
+    <button mat-raised-button type="button" (click)="onNoClick()">Cancelar</button>
+    <button mat-raised-button type="submit" color="primary">Editar</button>
+  </div>
+</form>

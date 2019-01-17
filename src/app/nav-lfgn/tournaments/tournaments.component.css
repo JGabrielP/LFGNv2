@@ -1,0 +1,51 @@
+.content {
+    padding: 20px;
+}
+
+.fab-button {
+    position: fixed;
+    bottom: 1rem;
+    right: 1rem;
+}
+
+.accordion-matchweek {
+    margin-top: 20px;
+}
+
+.example-card {
+    width: 300px;
+    margin-right: 20px;
+    margin-bottom: 20px;
+    display: inline-block;
+    padding: 0;
+}
+
+.example-card:hover {
+    box-shadow: 0 0 20px black;
+    cursor: pointer;
+}
+
+mat-card-header {
+    padding: 20px 20px 0px 20px;
+    background-color: #002984;
+    color: white;
+}
+
+mat-card-header mat-card-subtitle {
+    color: white;
+}
+
+.div-card {
+    display: inline-block;
+}
+
+.logo-card {
+    float: left;
+    width: 50%;
+    text-align: center;
+    margin-top: 10px;
+}
+
+.select-tournaments {
+    margin-left: 5%;
+}
