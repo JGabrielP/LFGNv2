@@ -6,14 +6,14 @@
             <mat-error *ngIf="tournamentCtrl.controls['nameCtrl'].errors">Ingrese un valor</mat-error>
         </mat-form-field>
         <mat-form-field>
-            <mat-select placeholder="Número de vueltas" [(value)]="Nvueltas" formControlName="nVueltasCtrl">
+            <mat-select placeholder="Número de vueltas" formControlName="nVueltasCtrl">
                 <mat-option value="1">Uno</mat-option>
                 <mat-option value="2">Doble</mat-option>
             </mat-select>
             <mat-error *ngIf="tournamentCtrl.controls['nVueltasCtrl'].errors">Seleccione una opción</mat-error>
         </mat-form-field><br>
         <mat-form-field>
-            <mat-select placeholder="No. equipos a clasificar" [(value)]="Nteams" formControlName="nTeamsCtrl">
+            <mat-select placeholder="No. equipos a clasificar" formControlName="nTeamsCtrl">
                 <mat-option value="2">2</mat-option>
                 <mat-option value="4">4</mat-option>
                 <mat-option value="8">8</mat-option>

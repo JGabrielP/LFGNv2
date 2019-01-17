@@ -135,7 +135,7 @@ export class AddPlayerDialog {
 })
 export class DropPlayerDialog {
 
-  constructor(private dialogRef: MatDialogRef<AddPlayerDialog>, @Inject(MAT_DIALOG_DATA) private data: Player) { }
+  constructor(private dialogRef: MatDialogRef<AddPlayerDialog>, @Inject(MAT_DIALOG_DATA) public data: Player) { }
 
   onNoClick(): void {
     this.dialogRef.close(null);

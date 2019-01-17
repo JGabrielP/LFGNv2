@@ -174,7 +174,7 @@ export class AddTeamDialog {
 })
 export class DeleteTeamDialog {
 
-  constructor(private dialogRef: MatDialogRef<DeleteTeamDialog>, @Inject(MAT_DIALOG_DATA) private data: Team) { }
+  constructor(private dialogRef: MatDialogRef<DeleteTeamDialog>, @Inject(MAT_DIALOG_DATA) public data: Team) { }
 
   onNoClick(): void {
     this.dialogRef.close(null);
@@ -191,7 +191,7 @@ export class EditTeamDialog {
   public LogoFile: File;
   public nameTeam = new FormControl('', [Validators.required], this.ifTeamExists.bind(this));
 
-  constructor(private dialogRef: MatDialogRef<EditTeamDialog>, @Inject(MAT_DIALOG_DATA) private data: Team, private teamService: TeamService, private snackBar: MatSnackBar) {
+  constructor(private dialogRef: MatDialogRef<EditTeamDialog>, @Inject(MAT_DIALOG_DATA) public data: Team, private teamService: TeamService, private snackBar: MatSnackBar) {
     this.nameTeam.setValue(data.Name);
   }
 

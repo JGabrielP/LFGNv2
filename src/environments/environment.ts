@@ -5,12 +5,12 @@
 export const environment = {
   production: false,
   firebase: {
-    apiKey: "AIzaSyCxqgN8RIVT1N9pKxlIuI58rNjMMUiOmq8",
-    authDomain: "ligafutbolgn.firebaseapp.com",
-    databaseURL: "https://ligafutbolgn.firebaseio.com",
-    projectId: "ligafutbolgn",
-    storageBucket: "ligafutbolgn.appspot.com",
-    messagingSenderId: "130892817141"
+    apiKey: "AIzaSyBjPRG0LV8ix3wM43vxLBIO8_gk9fLarNc",
+    authDomain: "lfgn-web.firebaseapp.com",
+    databaseURL: "https://lfgn-web.firebaseio.com",
+    projectId: "lfgn-web",
+    storageBucket: "lfgn-web.appspot.com",
+    messagingSenderId: "645625765096"
   }
 };
 

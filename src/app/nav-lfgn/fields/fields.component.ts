@@ -98,7 +98,7 @@ export class AddFieldDialog {
 })
 export class DeleteFieldDialog {
 
-  constructor(private dialogRef: MatDialogRef<DeleteFieldDialog>, @Inject(MAT_DIALOG_DATA) private data: Field) { }
+  constructor(private dialogRef: MatDialogRef<DeleteFieldDialog>, @Inject(MAT_DIALOG_DATA) public data: Field) { }
 
   onNoClick(): void {
     this.dialogRef.close(null);
@@ -115,7 +115,7 @@ export class EditFieldDialog {
     nameField: new FormControl('', [Validators.required], this.ifFieldExists.bind(this))
   });
 
-  constructor(private dialogRef: MatDialogRef<EditFieldDialog>, @Inject(MAT_DIALOG_DATA) private data: Field, private fieldService: FieldService, private snackBar: MatSnackBar) { }
+  constructor(private dialogRef: MatDialogRef<EditFieldDialog>, @Inject(MAT_DIALOG_DATA) public data: Field, private fieldService: FieldService, private snackBar: MatSnackBar) { }
 
   private getErrorMessage() {
     return this.formEdit.controls['nameField'].hasError('required') ? 'Debe introducir un valor' :
