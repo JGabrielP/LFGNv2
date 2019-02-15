@@ -37,9 +37,10 @@ import { TeamsComponent, AddTeamDialog, DeleteTeamDialog, EditTeamDialog } from 
 import { TeamDetailsComponent, AddPlayerDialog, DropPlayerDialog, EditPlayerDialog } from './nav-lfgn/teams/team-details/team-details.component';
 import { TranfersComponent, AddTranferDialog } from './nav-lfgn/tranfers/tranfers.component';
 import { FinancesComponent, AddConceptDialog } from './nav-lfgn/finances/finances.component';
-import { TournamentsComponent, AddTournamentDialog } from './nav-lfgn/tournaments/tournaments.component';
+import { TournamentsComponent, AddTournamentDialog, DeleteTournamentDialog } from './nav-lfgn/tournaments/tournaments.component';
 import { TournamentsMatchDetailsComponent, FinishDefaultDialog } from './nav-lfgn/tournaments/tournaments-match-details/tournaments-match-details.component';
 import { StatisticsComponent } from './nav-lfgn/statistics/statistics.component';
+import { DashboardComponent } from './nav-lfgn/dashboard/dashboard.component';
 
 @NgModule({
   declarations: [
@@ -65,9 +66,11 @@ import { StatisticsComponent } from './nav-lfgn/statistics/statistics.component'
     AddConceptDialog,
     TournamentsComponent,
     AddTournamentDialog,
+    DeleteTournamentDialog,
     TournamentsMatchDetailsComponent,
     FinishDefaultDialog,
-    StatisticsComponent
+    StatisticsComponent,
+    DashboardComponent
   ],
   imports: [
     BrowserModule,
@@ -80,7 +83,7 @@ import { StatisticsComponent } from './nav-lfgn/statistics/statistics.component'
     MaterialModule,
     AppRoutingModule
   ],
-  entryComponents: [AddFieldDialog, DeleteFieldDialog, EditFieldDialog, AddTeamDialog, DeleteTeamDialog, EditTeamDialog, AddPlayerDialog, DropPlayerDialog, EditPlayerDialog, AddTranferDialog, AddConceptDialog, AddTournamentDialog, FinishDefaultDialog],
+  entryComponents: [AddFieldDialog, DeleteFieldDialog, EditFieldDialog, AddTeamDialog, DeleteTeamDialog, EditTeamDialog, AddPlayerDialog, DropPlayerDialog, EditPlayerDialog, AddTranferDialog, AddConceptDialog, AddTournamentDialog, DeleteTournamentDialog, FinishDefaultDialog],
   providers: [AuthService, AuthGuard, FieldService, TeamService, PlayerService, TranferService, FinancesService, TournamentService, MatchService, StatisticsService],
   bootstrap: [AppComponent]
 })

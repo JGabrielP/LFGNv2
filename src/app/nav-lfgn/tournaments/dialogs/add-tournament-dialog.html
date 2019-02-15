@@ -13,6 +13,13 @@
             <mat-error *ngIf="tournamentCtrl.controls['nVueltasCtrl'].errors">Seleccione una opción</mat-error>
         </mat-form-field><br>
         <mat-form-field>
+            <mat-select placeholder="Modo de liguilla" formControlName="nTimesLiguillaCtrl">
+                <mat-option value="1">Eliminación directa</mat-option>
+                <mat-option value="2">Ida y vuelta</mat-option>
+            </mat-select>
+            <mat-error *ngIf="tournamentCtrl.controls['nTimesLiguillaCtrl'].errors">Seleccione una opción</mat-error>
+        </mat-form-field><br>
+        <mat-form-field>
             <mat-select placeholder="No. equipos a clasificar" formControlName="nTeamsCtrl">
                 <mat-option value="2">2</mat-option>
                 <mat-option value="4">4</mat-option>
@@ -21,7 +28,8 @@
             <mat-error *ngIf="tournamentCtrl.controls['nTeamsCtrl'].errors">Seleccione una opción</mat-error>
         </mat-form-field>
         <mat-form-field>
-            <input type="number" min="0" matInput placeholder="Límite tarjetas amarillas acumuladas" formControlName="nCardsCtrl">
+            <input type="number" min="0" matInput placeholder="Límite tarjetas amarillas acumuladas"
+                formControlName="nCardsCtrl">
             <mat-error *ngIf="tournamentCtrl.controls['nCardsCtrl'].errors">Ingrese un valor</mat-error>
         </mat-form-field>
     </div>

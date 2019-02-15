@@ -71,7 +71,7 @@
       Ahora ya está hecho. ¿Desea terminar?
       <mat-dialog-actions align="end">
         <button mat-button matStepperPrevious>Atrás</button>
-        <button mat-button (click)="add()">Guardar</button>
+        <button mat-button (click)="add()" [disabled]='buttonDisable'>Guardar</button>
       </mat-dialog-actions>
     </mat-step>
   </mat-horizontal-stepper>

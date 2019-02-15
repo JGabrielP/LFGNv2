@@ -1,0 +1,48 @@
+.content {
+    margin: 60px;
+}
+
+.example-card {
+    width: 300px;
+    padding: 0;
+    color: white;
+    font-family: "Google Sans", sans-serif;
+    font-size: 20px;
+    font-weight: 400;
+    display: inline-table;
+    margin-right: 60px;
+    margin-bottom: 60px;
+}
+
+.example-card:hover {
+    box-shadow: 0 0 20px black;
+}
+
+.card-content {
+    width: 300px;
+    height: 200px;
+    background-repeat: no-repeat;
+    background-size: 300px 200px;
+    text-align: center;
+    font-family: "Google Sans", sans-serif;
+}
+
+.header-card {
+    background-color: #394aa5;
+    padding: 10px;
+}
+
+.info {
+    font-size: 40px;
+    padding-top: 25px;
+    margin-bottom: 0;
+    padding-bottom: 0;
+    font-family: "Google Sans", sans-serif;
+}
+
+.logo-team {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    margin-right: 3px;
+}

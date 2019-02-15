@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { RouterModule, Routes, ChildActivationEnd } from '@angular/router';
+import { RouterModule, Routes } from '@angular/router';
 import { LoginComponent } from './login/login.component';
 import { NavLFGNComponent } from './nav-lfgn/nav-lfgn/nav-lfgn.component';
 import { NotFoundComponent } from './not-found/not-found.component';
@@ -11,13 +11,14 @@ import { FinancesComponent } from './nav-lfgn/finances/finances.component';
 import { TournamentsComponent } from './nav-lfgn/tournaments/tournaments.component';
 import { TournamentsMatchDetailsComponent } from './nav-lfgn/tournaments/tournaments-match-details/tournaments-match-details.component';
 import { StatisticsComponent } from './nav-lfgn/statistics/statistics.component';
+import { DashboardComponent } from './nav-lfgn/dashboard/dashboard.component';
 import { AuthGuard } from './services/guard/auth.guard';
 
 const routes: Routes = [
   { path: '', redirectTo: 'auth', pathMatch: 'full' },
   {
     path: 'dashboard', component: NavLFGNComponent, canActivate: [AuthGuard], children: [
-      { path: '', redirectTo: 'fields', pathMatch: 'full', canActivate: [AuthGuard] },
+      { path: '', component: DashboardComponent, pathMatch: 'full', canActivate: [AuthGuard] },
       { path: 'fields', component: FieldsComponent, canActivateChild: [AuthGuard] },
       {
         path: 'teams', children: [

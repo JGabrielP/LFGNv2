@@ -46,3 +46,10 @@
     text-align: center;
     display: inline-block;
 }
+
+.no-transfers-label {
+    text-align: center;
+    margin-top: 50px;
+    color: gray;
+    font-style: italic;
+}

@@ -12,10 +12,10 @@ import { AuthService } from '../../services/auth/auth.service';
 })
 export class NavLFGNComponent {
 
-  imageUrl: Observable<string | null>;
-  uploadPercent: Observable<number>;
-  email: string;
-  show: boolean = true;
+  public imageUrl: Observable<string | null>;
+  public uploadPercent: Observable<number>;
+  public email: string;
+  public show: boolean = true;
 
   isHandset$: Observable<boolean> = this.breakpointObserver.observe(Breakpoints.Handset).pipe(map(result => result.matches));
 

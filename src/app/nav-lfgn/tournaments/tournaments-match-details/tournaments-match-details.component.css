@@ -30,6 +30,7 @@
 .logoUrl-header {
     margin-top: 25px;
     width: 80px;
+    height: 80px;
 }
 
 .example-headers-align .mat-expansion-panel-header-title, .example-headers-align .mat-expansion-panel-header-description {

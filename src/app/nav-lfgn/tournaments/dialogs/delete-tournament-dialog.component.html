@@ -1,0 +1,8 @@
+<h1 mat-dialog-title>Eliminar torneo {{data}}</h1>
+<div mat-dialog-content>
+  <p>Esta acción borrará el torneo y sus estadísticas de la base de datos.</p>
+</div>
+<div mat-dialog-actions>
+  <button mat-raised-button (click)="onNoClick()">Cancelar</button>
+  <button mat-raised-button color="warn" cdkFocusInitial [mat-dialog-close]="data">Borrar</button>
+</div>

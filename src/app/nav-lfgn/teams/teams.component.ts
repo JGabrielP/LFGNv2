@@ -7,6 +7,8 @@ import { Team } from '../../models/team/team';
 import { Player } from '../../models/player/player';
 import { PlayerService } from 'src/app/services/player/player.service';
 import { Router } from '@angular/router';
+import * as jspdf from 'jspdf';
+import html2canvas from 'html2canvas';
 
 @Component({
   selector: 'app-teams',
@@ -34,8 +36,8 @@ export class TeamsComponent implements OnInit {
   async openDeleteDialog(team: Team) {
     const dialogRef = await this.dialog.open(DeleteTeamDialog, { data: team });
     dialogRef.afterClosed().subscribe(result => {
-      this.openSnackbar('Eliminando...');
       if (result != null) {
+        this.openSnackbar('Eliminando...');
         const players = this.playerService.getPlayers(result.Id);
         players.subscribe(Listplayers => {
           Listplayers.forEach(async (player: Player) => {
@@ -64,6 +66,19 @@ export class TeamsComponent implements OnInit {
   onInformation(team: Team) {
     this.router.navigate(['dashboard/teams', team.Id]);
   }
+
+  generateReport() {
+    var data = document.getElementById('Rteams');
+    html2canvas(data).then(canvas => {
+      var imgWidth = 190;
+      var imgHeight = canvas.height * imgWidth / canvas.width;
+      const contentDataURL = canvas.toDataURL('image/png')
+      let pdf = new jspdf();
+      pdf.text('Reporte de equipos', 10, 20)
+      pdf.addImage(contentDataURL, 'PNG', 10, 30, imgWidth, imgHeight)
+      pdf.save('ReporteEquipos.pdf');
+    });
+  }
 }
 
 @Component({
@@ -86,10 +101,12 @@ export class AddTeamDialog {
   public LogoUrl: File;
   public PhotoFile: File;
   public players: any[] = [];
+  public buttonDisable: boolean = false;
 
   constructor(private dialogRef: MatDialogRef<AddTeamDialog>, private teamService: TeamService, private playerService: PlayerService, private _formBuilder: FormBuilder, private snackBar: MatSnackBar) { }
 
   async add() {
+    this.buttonDisable = true;
     this.openSnackbar("Guardando información...");
     const idTeam = await this.teamService.add({ Id: '', Name: this.teamCtrl.value, LogoUrl: '' }, this.LogoUrl);
     this.players.forEach(async player => {

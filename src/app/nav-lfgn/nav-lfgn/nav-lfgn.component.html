@@ -1,35 +1,45 @@
 <mat-sidenav-container class="sidenav-container">
-  <mat-sidenav #drawer class="sidenav" fixedInViewport="true" [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'"
-    [mode]="(isHandset$ | async) ? 'over' : 'side'" [opened]="!(isHandset$ | async)">
+  <mat-sidenav #drawer class="sidenav" fixedInViewport="true"
+    [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'" [mode]="(isHandset$ | async) ? 'over' : 'side'"
+    [opened]="!(isHandset$ | async)">
     <mat-toolbar id="toolbar-nav" color="primary">
       <img id="imageGp-nav" src="../../../assets/images/MyLogoVector.png">
     </mat-toolbar>
     <mat-nav-list>
-      <a class="link-center"><img id="imageLfgn-nav" [src]="(imageUrl | async) || ''"></a>
+      <a class="link-center"><img id="imageLfgn-nav" [src]="(imageUrl | async) || ''" [routerLink]="['']"></a>
       <hr>
-      <a class="link" routerLinkActive="active" mat-list-item [routerLink]="['fields']"><i class="material-icons md-light">pause_presentation</i>Campos</a>
-      <a class="link" routerLinkActive="active" mat-list-item [routerLink]="['teams']"><i class="material-icons md-light">security</i>Equipos</a>
-      <a class="link" routerLinkActive="active" mat-list-item [routerLink]="['tranfers']"><i class="material-icons md-light">swap_horiz</i>Transferencias</a>
+      <a class="link" routerLinkActive="active" mat-list-item [routerLink]="['fields']"><i
+          class="material-icons md-light">pause_presentation</i>Campos</a>
+      <a class="link" routerLinkActive="active" mat-list-item [routerLink]="['teams']"><i
+          class="material-icons md-light">security</i>Equipos</a>
+      <a class="link" routerLinkActive="active" mat-list-item [routerLink]="['tranfers']"><i
+          class="material-icons md-light">swap_horiz</i>Transferencias</a>
       <hr>
-      <a class="link" routerLinkActive="active" mat-list-item><i class="material-icons md-light">event</i>Eventos
-        especiales</a>
-      <a class="link" routerLinkActive="active" mat-list-item [routerLink]="['tournaments']"><i class="material-icons md-light">highlight</i>Torneos</a>
-      <a class="link" routerLinkActive="active" mat-list-item [routerLink]="['statistics']"><i class="material-icons md-light">insert_chart_outlined</i>Estadísticas</a>
-      <a class="link" routerLinkActive="active" mat-list-item [routerLink]="['finances']"><i class="material-icons md-light">monetization_on</i>Finanzas</a>
+      <!--<a class="link" routerLinkActive="active" mat-list-item><i class="material-icons md-light">event</i>Eventos
+        especiales</a>-->
+      <a class="link" routerLinkActive="active" mat-list-item [routerLink]="['tournaments']"><i
+          class="material-icons md-light">highlight</i>Torneos</a>
+      <a class="link" routerLinkActive="active" mat-list-item [routerLink]="['statistics']"><i
+          class="material-icons md-light">insert_chart_outlined</i>Estadísticas</a>
+      <a class="link" routerLinkActive="active" mat-list-item [routerLink]="['finances']"><i
+          class="material-icons md-light">monetization_on</i>Finanzas</a>
     </mat-nav-list>
   </mat-sidenav>
   <mat-sidenav-content>
     <mat-toolbar color="primary">
-      <button type="button" aria-label="Toggle sidenav" mat-icon-button (click)="drawer.toggle()" *ngIf="isHandset$ | async">
+      <button type="button" aria-label="Toggle sidenav" mat-icon-button (click)="drawer.toggle()"
+        *ngIf="isHandset$ | async">
         <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
       </button>
       <span>LFGN</span>
       <span class="example-spacer"></span>
-      <a id="guide" mat-icon-button matTooltip="Formato de inscripción" href="https://firebasestorage.googleapis.com/v0/b/lfgn-web.appspot.com/o/files%2FFormatoInscripcionFGN.pdf?alt=media&token=421a6c3b-23a1-41c3-b53a-70b42444bf1d"
+      <a id="guide" mat-icon-button matTooltip="Formato de inscripción"
+        href="https://firebasestorage.googleapis.com/v0/b/lfgn-web.appspot.com/o/ligafgn%40gmail.com%2Ffiles%2FFormatoInscripcionFGN.pdf?alt=media&token=5955e0d4-854d-4aed-b7e4-b4fbfa446023"
         target="_blank">
         <i class="material-icons">save_alt</i>
       </a>
-      <a id="guide" mat-icon-button matTooltip="Ir a documentación" href="https://firebasestorage.googleapis.com/v0/b/lfgn-web.appspot.com/o/files%2FUser_Manual.pdf?alt=media&token=3b632503-9e44-41d5-b1e5-2497a4d174c2"
+      <a id="guide" mat-icon-button matTooltip="Ir a documentación"
+        href="https://firebasestorage.googleapis.com/v0/b/lfgn-web.appspot.com/o/files%2FUser_Manual.pdf?alt=media&token=3b632503-9e44-41d5-b1e5-2497a4d174c2"
         target="_blank">
         <i class="material-icons">import_contacts</i>
       </a>

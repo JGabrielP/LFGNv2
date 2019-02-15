@@ -15,7 +15,7 @@
     <input id="inputLogo" style="display: none;" type="file" (change)="setLogo($event)" accept="image/*">
     <button style="margin-left: 10px;" mat-button onclick="document.getElementById('inputLogo').click()">
       <mat-icon>cloud_upload</mat-icon>
-      <span>Logotipo...</span>
+      <span>Fotografía...</span>
     </button>
     <img style="width:40px;height: 40px; margin-left: 10px;" [src]="LogoBuffer || 'http://placehold.it/40'"><br>
     <mat-form-field style="margin-right: 10px;">

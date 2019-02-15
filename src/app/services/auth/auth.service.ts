@@ -19,10 +19,10 @@ export class AuthService {
   }
 
   public setImage(file: File) {
-    return this.fireStorage.ref('userImage/lfgn').put(file);
+    return this.fireStorage.ref(this.afAuth.auth.currentUser.email + '/userImage/' + this.afAuth.auth.currentUser.uid).put(file);
   }
 
   public getImage() {
-    return this.fireStorage.ref('userImage/lfgn').getDownloadURL();
+    return this.fireStorage.ref(this.afAuth.auth.currentUser.email + '/userImage/' + this.afAuth.auth.currentUser.uid).getDownloadURL();
   }
 }

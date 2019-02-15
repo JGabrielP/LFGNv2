@@ -1,23 +1,33 @@
 <div class="content">
-  <mat-card class="card-transfer" *ngFor="let transfer of tranfers | async">
-    <mat-card-header class="card-header">
-      <img [src]="transfer.Player.PhotoUrl || '../../../../../assets/images/NoPhotoPlayer.png'" mat-card-avatar>
-      <mat-card-title>{{transfer.Player.Name}} {{transfer.Player.FirstName}} {{transfer.Player.LastName}}</mat-card-title>
-      <mat-card-subtitle>Realizado el {{transfer.Date.toDate().toLocaleDateString('es-ES',{ year: 'numeric', month:
-        'short', day: 'numeric'})}}</mat-card-subtitle>
-    </mat-card-header>
-    <mat-card-content class="card-content">
-      <div class="team-source">
-        <img [src]="transfer.TeamSource.LogoUrl || '../../../../../assets/images/NoLogo.png'" width="24px" height="24px">
-        {{transfer.TeamSource.Name}}
-      </div>
-      <mat-icon class="icon-transfer">arrow_forward</mat-icon>
-      <div class="team-dest">{{transfer.TeamDestin.Name}}
-        <img [src]="transfer.TeamDestin.LogoUrl || '../../../../../assets/images/NoLogo.png'" width="24px" height="24px">
-      </div>
-    </mat-card-content>
-  </mat-card>
+  <div *ngIf="tranfers|async;let tranfers">
+    <div *ngIf="tranfers?.length > 0; else noTransfers">
+      <mat-card class="card-transfer" *ngFor="let transfer of tranfers">
+        <mat-card-header class="card-header">
+          <img [src]="transfer.Player.PhotoUrl || '../../../../../assets/images/NoPhotoPlayer.png'" mat-card-avatar>
+          <mat-card-title>{{transfer.Player.Name}} {{transfer.Player.FirstName}} {{transfer.Player.LastName}}
+          </mat-card-title>
+          <mat-card-subtitle>Realizado el {{transfer.Date.toDate().toLocaleDateString('es-ES',{ year: 'numeric', month:
+            'short', day: 'numeric'})}}</mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-content class="card-content">
+          <div class="team-source">
+            <img [src]="transfer.TeamSource.LogoUrl || '../../../../../assets/images/NoLogo.png'" width="24px"
+              height="24px">
+            {{transfer.TeamSource.Name}}
+          </div>
+          <mat-icon class="icon-transfer">arrow_forward</mat-icon>
+          <div class="team-dest">{{transfer.TeamDestin.Name}}
+            <img [src]="transfer.TeamDestin.LogoUrl || '../../../../../assets/images/NoLogo.png'" width="24px"
+              height="24px">
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
 </div>
+<ng-template #noTransfers>
+  <div class="no-transfers-label">No existen transferencias registradas.</div>
+</ng-template>
 <button class="fab-button" mat-fab color="primary" matTooltip="Nueva transferencia" (click)="openAddDialog()">
   <mat-icon>add</mat-icon>
 </button>

@@ -2,6 +2,7 @@
   display: inline-block;
   margin: 20px;
   padding: 0px;
+  width: 250px;
 }
 
 .card:hover {

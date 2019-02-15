@@ -7,6 +7,8 @@ import { FormBuilder, Validators, FormControl } from '@angular/forms';
 import { Player } from '../../../models/player/player';
 import { Observable } from 'rxjs';
 import { Team } from 'src/app/models/team/team';
+import * as jspdf from 'jspdf';
+import html2canvas from 'html2canvas';
 
 @Component({
   selector: 'app-team-details',
@@ -52,6 +54,46 @@ export class TeamDetailsComponent implements OnInit {
   private openSnackbar(message: string) {
     this.snackBar.open(message, "Hecho", {
       duration: 3000,
+    });
+  }
+
+  private openSnackbar2(message: string) {
+    this.snackBar.open(message, "Espere");
+  }
+
+  async generateReport(teamName: string) {
+    let i: number = 0;
+    var doc = new jspdf();
+    this.playerService.getPlayers(this.activatedRoute.snapshot.params['id']).subscribe(async x => {
+      this.openSnackbar2('Generando credenciales...');
+      for (let index = 0; index < x.length; index++) {
+        await html2canvas(document.getElementById('IDCard' + index)).then(async c => {
+          var img = c.toDataURL("image/png");
+          if (index % 2) {
+            await doc.addImage(img, 'JPEG', 102, 0 + 75 * i, 100, 75);
+            i++;
+          }
+          else
+            await doc.addImage(img, 'JPEG', 0, 0 + 75 * i, 100, 75);
+          if (75 * i > 280) {
+            i = 0;
+            doc.addPage();
+          }
+        });
+      }
+      doc.save('Credenciales' + teamName + '.pdf');
+      this.openSnackbar('Credenciales generadas correctamente.');
+    });
+  }
+
+  generateIDCard(player: Player, idCard: string) {
+    this.openSnackbar2('Generando credencial...');
+    var doc = new jspdf();
+    html2canvas(document.getElementById(idCard)).then(canvas => {
+      var img = canvas.toDataURL("image/png");
+      doc.addImage(img, 'JPEG', 0, 0, 100, 75);
+      doc.save('Credencial' + '_' + player.Name + '_' + player.FirstName + '_' + player.LastName + '_' + player.Team.Name + '.pdf');
+      this.openSnackbar('Credencial generada.');
     });
   }
 }
@@ -196,7 +238,7 @@ export class EditPlayerDialog {
           Name: this.playerCtrl.controls['nameCtrl'].value,
           FirstName: this.playerCtrl.controls['firstNameCtrl'].value,
           LastName: this.playerCtrl.controls['lastNameCtrl'].value,
-          BirthDate: this.playerCtrl.controls['birthdateCtrl'].value,
+          BirthDate: this.playerCtrl.controls['birthdateCtrl'].value
         });
     }
   }

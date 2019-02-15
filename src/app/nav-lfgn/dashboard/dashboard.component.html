@@ -1,0 +1,114 @@
+<div class="content">
+
+  <mat-card class="example-card">
+    <mat-card-header class="header-card">
+      <p>Jugadores registrados</p>
+    </mat-card-header>
+    <mat-divider style="background-color:white;"></mat-divider>
+    <div>
+      <mat-card-content class="card-content" style="background-image: url('../../../assets/images/Fondo1.png');">
+        <p class="info">{{(Players | async)?.length}}</p>
+        <p>Jugadores</p>
+      </mat-card-content>
+    </div>
+  </mat-card>
+
+  <mat-card class="example-card">
+    <mat-card-header class="header-card">
+      <p>Equipos registrados</p>
+    </mat-card-header>
+    <mat-divider style="background-color:white;"></mat-divider>
+    <div>
+      <mat-card-content class="card-content" style="background-image: url('../../../assets/images/FondoTeams.png');">
+        <p class="info">{{(Teams | async)?.length}}</p>
+        <p>Equipos</p>
+        <img class="logo-team" *ngFor="let team of Teams | async" width="32px" height="32px"
+          [src]="team.LogoUrl || '../../assets/images/NoLogo.png'" [matTooltip]="team.Name">
+      </mat-card-content>
+    </div>
+  </mat-card>
+
+  <mat-card class="example-card">
+    <mat-card-header class="header-card">
+      <p>Torneo actual</p>
+    </mat-card-header>
+    <mat-divider style="background-color:white;"></mat-divider>
+    <div *ngIf="Tournament | async; let tournament">
+      <div *ngIf="tournament?.length > 0; else noTournament">
+        <mat-card-content class="card-content" style="background-image: url('../../../assets/images/FondoTour.png');">
+          <p class="info">{{tournament[0].Name}}</p>
+          <p>Límite de tarjetas amarillas: {{tournament[0].nCards}}</p>
+          <p>Equipos que califican a liguilla: {{tournament[0].nTeams}}</p>
+        </mat-card-content>
+      </div>
+    </div>
+    <ng-template #noTournament>
+      <mat-card-content class="card-content" style="background-image: url('../../../assets/images/FondoTour.png');">
+        <p class="info">Sin definir</p>
+      </mat-card-content>
+    </ng-template>
+  </mat-card>
+
+  <mat-card class="example-card">
+    <mat-card-header class="header-card">
+      <p>Líder de torneo</p>
+    </mat-card-header>
+    <mat-divider style="background-color:white;"></mat-divider>
+    <div *ngIf="teamLeader | async; let teamL">
+      <div *ngIf="teamL?.length > 0; else noLeader">
+        <mat-card-content class="card-content"
+          style="background-image: url('../../../assets/images/FondoLeaderboard.png');">
+          <p style="padding-top: 20px; font-size:20px;">{{teamL[0].team.Name}}</p>
+          <img width="64px" height="64px" [src]="teamL[0].team.LogoUrl || '../../assets/images/NoLogo.png' ">
+          <p>PTS: {{teamL[0].pts}} | DG: {{teamL[0].dg}} | JG: {{teamL[0].jg}} | JP: {{teamL[0].jp}} | JE:
+            {{teamL[0].jp}}</p>
+        </mat-card-content>
+      </div>
+    </div>
+    <ng-template #noLeader>
+      <mat-card-content class="card-content" style="background-image: url('../../../assets/images/FondoTour.png');">
+        <p class="info">Sin definir</p>
+      </mat-card-content>
+    </ng-template>
+  </mat-card>
+
+  <mat-card class="example-card">
+    <mat-card-header class="header-card">
+      <p>Líder de goleo</p>
+    </mat-card-header>
+    <mat-divider style="background-color:white;"></mat-divider>
+    <div *ngIf="playerLeader | async; let playerL">
+      <div *ngIf="playerL?.length > 0; else noLeaderGoal">
+        <mat-card-content class="card-content" style="background-image: url('../../../assets/images/FondoBall.png');">
+          <p style="padding-top:20px; font-size:16px;">
+            {{playerL[0].Player.Name + ' ' + playerL[0].Player.FirstName + ' ' + playerL[0].Player.LastName}}</p>
+          <img style="border-radius:50%;" width="80px" height="80px"
+            [src]="playerL[0].Player.PhotoUrl || '../../assets/images/NoPhotoPlayer.png' ">
+          <img style="border-radius:50%;" width="80px" height="80px"
+            [src]="playerL[0].Player.Team.LogoUrl || '../../assets/images/NoLogo.png' "
+            [matTooltip]="playerL[0].Player.Team.Name">
+          <p>{{playerL[0].nGoals}} Goles</p>
+        </mat-card-content>
+      </div>
+    </div>
+    <ng-template #noLeaderGoal>
+      <mat-card-content class="card-content" style="background-image: url('../../../assets/images/FondoBall.png');">
+        <p class="info">Sin definir</p>
+      </mat-card-content>
+    </ng-template>
+  </mat-card>
+
+  <mat-card class="example-card">
+    <mat-card-header class="header-card">
+      <p>Total de finanzas</p>
+    </mat-card-header>
+    <mat-divider style="background-color:white;"></mat-divider>
+    <div>
+      <mat-card-content class="card-content" style="background-image: url('../../../assets/images/FondoFinances.png');">
+        <p class="info">{{total | currency}}</p>
+        <p>MXN</p>
+      </mat-card-content>
+    </div>
+  </mat-card>
+
+</div>

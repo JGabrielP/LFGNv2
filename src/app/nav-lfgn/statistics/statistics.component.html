@@ -6,104 +6,174 @@
       </mat-option>
     </mat-select>
   </mat-form-field>
-  <p>TABLA GENERAL</p>
-  <mat-divider></mat-divider>
-  <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8">
+  <div *ngIf="(tournaments | async)?.length > 0; else noTournament">
+    <div>
+      <p>TABLA GENERAL
+        <button mat-icon-button (click)="generateReport('Clasificacion')" matTooltip="Generar reporte">
+          <mat-icon aria-label="Example icon-button with a heart icon">assignment</mat-icon>
+        </button>
+      </p>
+      <table id="Clasificacion" mat-table [dataSource]="dataSource" #MatSort="matSort" matSort matSortActive="pos"
+        matSortDirection="asc" class="mat-elevation-z8">
 
-    <ng-container matColumnDef="pos">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header> POS </th>
-      <td mat-cell *matCellDef="let element"> {{element.pos}} </td>
-    </ng-container>
+        <ng-container matColumnDef="pos">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> POS </th>
+          <td mat-cell *matCellDef="let element"> {{element.pos}} </td>
+        </ng-container>
 
-    <ng-container matColumnDef="img">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header></th>
-      <td mat-cell *matCellDef="let element">
-        <img class="logo-team" [src]=" element.team.LogoUrl || '../../../assets/images/NoLogo.png' ">
-      </td>
-    </ng-container>
+        <ng-container matColumnDef="img">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header></th>
+          <td mat-cell *matCellDef="let element">
+            <img class="logo-team" [src]=" element.team.LogoUrl || '../../../assets/images/NoLogo.png' ">
+          </td>
+        </ng-container>
 
-    <ng-container matColumnDef="name">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header> NOMBRE </th>
-      <td mat-cell *matCellDef="let element"> {{element.team.Name}} </td>
-    </ng-container>
+        <ng-container matColumnDef="name">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> NOMBRE </th>
+          <td mat-cell *matCellDef="let element"> {{element.team.Name}} </td>
+        </ng-container>
 
-    <ng-container matColumnDef="pts">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header> PTS </th>
-      <td class="bold" mat-cell *matCellDef="let element"> {{element.pts}} </td>
-    </ng-container>
+        <ng-container matColumnDef="pts">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> PTS </th>
+          <td class="bold" mat-cell *matCellDef="let element"> {{element.pts}} </td>
+        </ng-container>
 
-    <ng-container matColumnDef="jj">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header> JJ </th>
-      <td mat-cell *matCellDef="let element"> {{element.jj}} </td>
-    </ng-container>
+        <ng-container matColumnDef="jj">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> JJ </th>
+          <td mat-cell *matCellDef="let element"> {{element.jj}} </td>
+        </ng-container>
 
-    <ng-container matColumnDef="dg">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header> DG </th>
-      <td mat-cell *matCellDef="let element"> {{element.dg}} </td>
-    </ng-container>
+        <ng-container matColumnDef="dg">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> DG </th>
+          <td mat-cell *matCellDef="let element"> {{element.dg}} </td>
+        </ng-container>
 
-    <ng-container matColumnDef="jg">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header> JG </th>
-      <td mat-cell *matCellDef="let element"> {{element.jg}} </td>
-    </ng-container>
+        <ng-container matColumnDef="jg">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> JG </th>
+          <td mat-cell *matCellDef="let element"> {{element.jg}} </td>
+        </ng-container>
 
-    <ng-container matColumnDef="je">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header> JE </th>
-      <td mat-cell *matCellDef="let element"> {{element.je}} </td>
-    </ng-container>
+        <ng-container matColumnDef="je">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> JE </th>
+          <td mat-cell *matCellDef="let element"> {{element.je}} </td>
+        </ng-container>
 
-    <ng-container matColumnDef="jp">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header> JP </th>
-      <td mat-cell *matCellDef="let element"> {{element.jp}} </td>
-    </ng-container>
+        <ng-container matColumnDef="jp">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> JP </th>
+          <td mat-cell *matCellDef="let element"> {{element.jp}} </td>
+        </ng-container>
 
-    <ng-container matColumnDef="gf">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header> GF </th>
-      <td mat-cell *matCellDef="let element"> {{element.gf}} </td>
-    </ng-container>
+        <ng-container matColumnDef="gf">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> GF </th>
+          <td mat-cell *matCellDef="let element"> {{element.gf}} </td>
+        </ng-container>
 
-    <ng-container matColumnDef="gc">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header> GC </th>
-      <td mat-cell *matCellDef="let element"> {{element.gc}} </td>
-    </ng-container>
+        <ng-container matColumnDef="gc">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> GC </th>
+          <td mat-cell *matCellDef="let element"> {{element.gc}} </td>
+        </ng-container>
 
-    <tr class="header" mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-    <tr class="example-element-row" mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-  </table>
-  <p>TABLA DE GOLEO</p>
-  <mat-divider></mat-divider>
-  <table mat-table [dataSource]="dataSourceLeadergoal" matSort class="mat-elevation-z8">
+        <tr class="header" mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr class="example-element-row" mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
+      <br><br>
+    </div>
+    <div>
+      <mat-divider></mat-divider>
+      <p>TABLA DE GOLEO <button mat-icon-button (click)="generateReport('Goleadores')" matTooltip="Generar reporte">
+          <mat-icon aria-label="Example icon-button with a heart icon">assignment</mat-icon>
+        </button>
+      </p>
+      <table id="Goleadores" mat-table [dataSource]="dataSourceLeadergoal" #hBSort="matSort" matSort matSortActive="pos"
+        matSortDirection="asc" class="mat-elevation-z8">
 
-    <ng-container matColumnDef="pos">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header> POS </th>
-      <td mat-cell *matCellDef="let element"> {{element.pos}} </td>
-    </ng-container>
+        <ng-container matColumnDef="pos">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> POS </th>
+          <td mat-cell *matCellDef="let element"> {{element.pos}} </td>
+        </ng-container>
 
-    <ng-container matColumnDef="img">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header></th>
-      <td mat-cell *matCellDef="let element">
-        <img class="logo-team" [src]=" element.Team.LogoUrl || '../../../assets/images/NoLogo.png' " [matTooltip]="element.Team.Name">
-      </td>
-    </ng-container>
+        <ng-container matColumnDef="img">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header></th>
+          <td mat-cell *matCellDef="let element">
+            <img class="logo-team" [src]=" element.Player.Team.LogoUrl || '../../../assets/images/NoLogo.png' "
+              [matTooltip]="element.Player.Team.Name">
+          </td>
+        </ng-container>
 
-    <ng-container matColumnDef="photo">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header></th>
-      <td mat-cell *matCellDef="let element">
-        <img class="photo-player" [src]=" element.Player.PhotoUrl || '../../../assets/images/NoPhotoPlayer.png' ">
-      </td>
-    </ng-container>
+        <ng-container matColumnDef="photo">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header></th>
+          <td mat-cell *matCellDef="let element">
+            <img class="photo-player" [src]=" element.Player.PhotoUrl || '../../../assets/images/NoPhotoPlayer.png' "
+              [matTooltip]="element.Player.Folio">
+          </td>
+        </ng-container>
 
-    <ng-container matColumnDef="name">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header> NOMBRE </th>
-      <td mat-cell *matCellDef="let element"> {{element.Player.Name + ' ' + element.Player.FirstName + ' ' + element.Player.LastName}} </td>
-    </ng-container>
+        <ng-container matColumnDef="name">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> NOMBRE </th>
+          <td mat-cell *matCellDef="let element"> {{element.Player.Name + ' ' + element.Player.FirstName + ' ' +
+          element.Player.LastName}} </td>
+        </ng-container>
 
-    <ng-container matColumnDef="ngoals">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header> GOLES </th>
-      <td class="bold" mat-cell *matCellDef="let element"> {{element.nGoals}} </td>
-    </ng-container>
+        <ng-container matColumnDef="ngoals">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> GOLES </th>
+          <td class="bold" mat-cell *matCellDef="let element"> {{element.nGoals}} </td>
+        </ng-container>
 
-    <tr class="header" mat-header-row *matHeaderRowDef="displayedColumnsLeadergoal"></tr>
-    <tr class="example-element-row" mat-row *matRowDef="let row; columns: displayedColumnsLeadergoal;"></tr>
-  </table>
+        <tr class="header" mat-header-row *matHeaderRowDef="displayedColumnsLeadergoal"></tr>
+        <tr class="example-element-row" mat-row *matRowDef="let row; columns: displayedColumnsLeadergoal;"></tr>
+      </table>
+      <br><br>
+    </div>
+    <div>
+      <mat-divider></mat-divider>
+      <p>TARJETAS AMARILLAS <button mat-icon-button (click)="generateReport('Tarjetas Amarillas')"
+          matTooltip="Generar reporte">
+          <mat-icon aria-label="Example icon-button with a heart icon">assignment</mat-icon>
+        </button>
+      </p>
+      <table id="Tarjetas Amarillas" mat-table [dataSource]="dataSourceLeaderYCards" #sBSort="matSort" matSort
+        matSortActive="nYCards" matSortDirection="desc" class="mat-elevation-z8">
+
+        <ng-container matColumnDef="img">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header></th>
+          <td mat-cell *matCellDef="let element">
+            <img class="logo-team" [src]=" element.Player.Team.LogoUrl || '../../../assets/images/NoLogo.png' "
+              [matTooltip]="element.Player.Team.Name">
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="photo">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header></th>
+          <td mat-cell *matCellDef="let element">
+            <img class="photo-player" [src]=" element.Player.PhotoUrl || '../../../assets/images/NoPhotoPlayer.png' "
+              [matTooltip]="element.Player.Folio">
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="name">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> NOMBRE </th>
+          <td mat-cell *matCellDef="let element"> {{element.Player.Name + ' ' + element.Player.FirstName + ' ' +
+          element.Player.LastName}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="nYCards">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> TARJETAS ACUMULADAS </th>
+          <td class="bold" mat-cell *matCellDef="let element">
+            <p style="color:red" *ngIf="element.nYCards == nCards ; else elseBlock">{{element.nYCards}} - SUSPENDIDO
+              PARA
+              JORNADA {{element.LastMatchweek + 1}}</p>
+            <ng-template #elseBlock>
+              <p style="color:black">{{element.nYCards}}</p>
+            </ng-template>
+          </td>
+        </ng-container>
+
+        <tr class="header" mat-header-row *matHeaderRowDef="displayedColumnsLeaderYCards"></tr>
+        <tr class="example-element-row" mat-row *matRowDef="let row; columns: displayedColumnsLeaderYCards;"></tr>
+      </table>
+    </div>
+  </div>
+  <ng-template #noTournament>
+    <div class="no-tournament-label">No existen torneos generados para ver estadísticas.</div>
+  </ng-template>
 </div>

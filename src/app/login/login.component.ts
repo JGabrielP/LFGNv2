@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material';
 import { Router } from '@angular/router';
 import { FormControl, Validators } from '@angular/forms';
-import { Observable } from 'rxjs';
 import { AuthService } from '../services/auth/auth.service';
 
 @Component({
@@ -12,17 +11,15 @@ import { AuthService } from '../services/auth/auth.service';
 })
 export class LoginComponent implements OnInit {
 
-  email = new FormControl('', [Validators.required, Validators.email]);
-  password = new FormControl('', [Validators.required]);
-  hide = true;
-  imageUrl: Observable<string | null>;
+  public email = new FormControl('', [Validators.required, Validators.email]);
+  public password = new FormControl('', [Validators.required]);
+  public hide = true;
 
   constructor(public snackBar: MatSnackBar, private authService: AuthService, private router: Router) { }
 
   ngOnInit() {
     if (this.authService.afAuth.user)
       this.router.navigate(['dashboard']);
-    this.imageUrl = this.authService.getImage();
   }
 
   getErrorMessage() {

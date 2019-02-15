@@ -4,6 +4,8 @@ import { FinancesService } from 'src/app/services/finances/finances.service';
 import { MatDialogRef, MatDialog, MatSnackBar } from '@angular/material';
 import { FormBuilder, Validators } from '@angular/forms';
 import { Observable } from 'rxjs';
+import * as jspdf from 'jspdf';
+import html2canvas from 'html2canvas';
 
 @Component({
   selector: 'app-finances',
@@ -41,6 +43,19 @@ export class FinancesComponent implements OnInit {
 
   delete(finance: Finance) {
     this.financeService.delete(finance);
+  }
+
+  generateReport() {
+    var data = document.getElementById('tableFinances');
+    html2canvas(data).then(canvas => {
+      var imgWidth = 190;
+      var imgHeight = canvas.height * imgWidth / canvas.width;
+      const contentDataURL = canvas.toDataURL('image/png')
+      let pdf = new jspdf();
+      pdf.text('Reporte de finanzas', 10, 20)
+      pdf.addImage(contentDataURL, 'PNG', 10, 30, imgWidth, imgHeight)
+      pdf.save('ReporteFinanzas.pdf');
+    });
   }
 }
 

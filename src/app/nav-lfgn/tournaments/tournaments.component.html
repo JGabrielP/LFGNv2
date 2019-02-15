@@ -6,67 +6,249 @@
       </mat-option>
     </mat-select>
   </mat-form-field>
-  <mat-accordion>
-    <mat-expansion-panel *ngFor="let partidos of jornadas | async; let i=index">
-      <mat-expansion-panel-header>
-        <mat-panel-title>
-          Jornada {{i+1}}
-        </mat-panel-title>
-        <mat-panel-description>
-          Partidos
-        </mat-panel-description>
-      </mat-expansion-panel-header>
-      <div class="div-card" *ngFor="let partido of partidos | async; let in=index">
-        <mat-card (click)="onInformation('Jornada'+(i+1), 'Partido'+(in+1), partido.Local, partido.Visit)" class="example-card"
-          *ngIf="!(partido.Visit.Id == 'Descansa' || partido.Local.Id == 'Descansa'); else elseBlock" matBadge="F"
-          matBadgeSize='large' matBadgeColor="accent" [matBadgeHidden]="!partido.Finished">
-          <mat-card-header>
-            <mat-card-title>
-              <mat-icon style="margin-right:20px; vertical-align: middle;">schedule</mat-icon>
-              {{partido.Date == null ? 'Sin definir' : partido.Date.toDate().toLocaleDateString('es-ES',{ weekday:
-              'short', year: 'numeric', month: 'short', day: 'numeric', hour12: true, hour: 'numeric', minute:
-              '2-digit' })}}
-            </mat-card-title>
-            <mat-card-subtitle>
-              <mat-icon style="margin-right:20px; vertical-align: middle;">pause_presentation</mat-icon>
-              {{partido.Field == null ? 'Sin definir' : 'Campo ' + partido.Field}}
-            </mat-card-subtitle>
-          </mat-card-header>
-          <mat-card-content>
-            <div class="logo-card" style="float:left; width: 45%; text-align: center; margin-top: 10px;">
-              <img width="50px" height="50px" [src]="partido.Local.LogoUrl || '../../assets/images/NoLogo.png'">
-              <p matBadge="{{partido.GoalsLocal}}">{{partido.Local.Name}}</p>
-            </div>
-            <div style="float:left; width:10%; text-align: center; margin-top: 50px; font-weight: bold;">
-              Vs
-            </div>
-            <div style="float: right; width: 45%; text-align: center; margin-top: 10px;">
-              <img width="50px" height="50px" [src]="partido.Visit.LogoUrl || '../../assets/images/NoLogo.png'">
-              <p matBadge="{{partido.GoalsVisit}}" matBadgePosition="before">{{partido.Visit.Name}}</p>
-            </div>
-          </mat-card-content>
-        </mat-card>
-        <ng-template #elseBlock>
-          <mat-card class="example-card" disabled>
+  <button mat-icon-button matTooltip="Eliminar torneo" (click)="openDeleteDialog(currentTournament)">
+    <mat-icon>delete</mat-icon>
+  </button>
+  <div *ngIf="(tournaments | async)?.length > 0; else noTournament">
+    <mat-accordion>
+      <mat-expansion-panel *ngFor="let partidos of jornadas | async; let i=index">
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            Jornada {{i+1}}
+          </mat-panel-title>
+          <mat-panel-description>
+            Partidos
+          </mat-panel-description>
+        </mat-expansion-panel-header>
+        <div class="div-card" *ngFor="let partido of partidos | async; let in=index">
+          <mat-card (click)="onInformation('Jornada'+(i+1), 'Partido'+(in+1), partido.Local, partido.Visit, 1)"
+            class="example-card"
+            *ngIf="!(partido.Visit.Id == 'Descansa' || partido.Local.Id == 'Descansa'); else elseBlock" matBadge="F"
+            matBadgeSize='large' matBadgeColor="accent" [matBadgeHidden]="!partido.Finished">
             <mat-card-header>
               <mat-card-title>
-                DESCANSA
+                <mat-icon style="margin-right:20px; vertical-align: middle;">schedule</mat-icon>
+                {{partido.Date == null ? 'Sin definir' : partido.Date.toDate().toLocaleDateString('es-ES',{ weekday:
+              'short', year: 'numeric', month: 'short', day: 'numeric', hour12: true, hour: 'numeric', minute:
+              '2-digit' })}}
               </mat-card-title>
               <mat-card-subtitle>
-                <mat-icon>block</mat-icon>
+                <mat-icon style="margin-right:20px; vertical-align: middle;">pause_presentation</mat-icon>
+                {{partido.Field == null ? 'Sin definir' : 'Campo ' + partido.Field.Name}}
               </mat-card-subtitle>
             </mat-card-header>
             <mat-card-content>
-              <div style="float:left; width: 100%; text-align: center; margin-top: 10px;">
-                <img width="50px" height="50px" [src]="partido.Local.LogoUrl || partido.Visit.LogoUrl || '../../assets/images/NoLogo.png'">
-                <p>{{partido.Local.Name == '' ? partido.Visit.Name : partido.Local.Name}}</p>
+              <div class="logo-card" style="float:left; width: 45%; text-align: center; margin-top: 10px;">
+                <img width="50px" height="50px" [src]="partido.Local.LogoUrl || '../../assets/images/NoLogo.png'">
+                <p matBadge="{{partido.GoalsLocal}}">{{partido.Local.Name}}</p>
+              </div>
+              <div style="float:left; width:10%; text-align: center; margin-top: 50px; font-weight: bold;">
+                Vs
+              </div>
+              <div style="float: right; width: 45%; text-align: center; margin-top: 10px;">
+                <img width="50px" height="50px" [src]="partido.Visit.LogoUrl || '../../assets/images/NoLogo.png'">
+                <p matBadge="{{partido.GoalsVisit}}" matBadgePosition="before">{{partido.Visit.Name}}</p>
               </div>
             </mat-card-content>
           </mat-card>
-        </ng-template>
+          <ng-template #elseBlock>
+            <mat-card class="example-card" disabled>
+              <mat-card-header>
+                <mat-card-title>
+                  DESCANSA
+                </mat-card-title>
+                <mat-card-subtitle>
+                  <mat-icon>block</mat-icon>
+                </mat-card-subtitle>
+              </mat-card-header>
+              <mat-card-content>
+                <div style="float:left; width: 100%; text-align: center; margin-top: 10px;">
+                  <img width="50px" height="50px"
+                    [src]="partido.Local.LogoUrl || partido.Visit.LogoUrl || '../../assets/images/NoLogo.png'">
+                  <p>{{partido.Local.Name == '' ? partido.Visit.Name : partido.Local.Name}}</p>
+                </div>
+              </mat-card-content>
+            </mat-card>
+          </ng-template>
+        </div>
+      </mat-expansion-panel>
+    </mat-accordion>
+    <div
+      *ngIf="(liguillaCuartos | async)?.length > 0 || (liguillaSemifinales | async)?.length > 0 || (liguillaFinal | async)?.length > 0 || (champion | async)?.length > 0">
+      <br><br>
+      <mat-divider></mat-divider>
+      <p>Liguilla</p>
+    </div>
+    <mat-accordion>
+      <div *ngIf="liguillaCuartos | async; let liguillas">
+        <div *ngIf="liguillas?.length > 0">
+          <mat-expansion-panel>
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                {{liguillas[0].Type}}
+              </mat-panel-title>
+              <mat-panel-description>
+                Partidos
+              </mat-panel-description>
+            </mat-expansion-panel-header>
+            <div class="div-card" *ngFor="let partido of liguillas">
+              <mat-card (click)="onInformation(partido.Type, partido.MatchName, partido.Local, partido.Visit, 2)"
+                class="example-card" matBadge="F" matBadgeSize='large' matBadgeColor="accent"
+                [matBadgeHidden]="!partido.Finished">
+                <mat-card-header>
+                  <mat-card-title>
+                    <mat-icon style="margin-right:20px; vertical-align: middle;">schedule</mat-icon>
+                    {{partido.Date == null ? 'Sin definir' : partido.Date.toDate().toLocaleDateString('es-ES',{ weekday:
+                  'short', year: 'numeric', month: 'short', day: 'numeric', hour12: true, hour: 'numeric', minute:
+                  '2-digit' })}}
+                  </mat-card-title>
+                  <mat-card-subtitle>
+                    <mat-icon style="margin-right:20px; vertical-align: middle;">pause_presentation</mat-icon>
+                    {{partido.Field == null ? 'Sin definir' : 'Campo ' + partido.Field.Name}}
+                  </mat-card-subtitle>
+                </mat-card-header>
+                <mat-card-content>
+                  <div class="logo-card" style="float:left; width: 45%; text-align: center; margin-top: 10px;">
+                    <img width="50px" height="50px" [src]="partido.Local.LogoUrl || '../../assets/images/NoLogo.png'">
+                    <p matBadge="{{partido.GoalsLocal}}">{{partido.Local.Name}}</p>
+                  </div>
+                  <div style="float:left; width:10%; text-align: center; margin-top: 50px; font-weight: bold;">
+                    Vs
+                  </div>
+                  <div style="float: right; width: 45%; text-align: center; margin-top: 10px;">
+                    <img width="50px" height="50px" [src]="partido.Visit.LogoUrl || '../../assets/images/NoLogo.png'">
+                    <p matBadge="{{partido.GoalsVisit}}" matBadgePosition="before">{{partido.Visit.Name}}</p>
+                  </div>
+                </mat-card-content>
+              </mat-card>
+            </div>
+          </mat-expansion-panel>
+        </div>
       </div>
-    </mat-expansion-panel>
-  </mat-accordion>
+      <div *ngIf="liguillaSemifinales | async; let liguillas">
+        <div *ngIf="liguillas?.length > 0">
+          <mat-expansion-panel>
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                {{liguillas[0].Type}}
+              </mat-panel-title>
+              <mat-panel-description>
+                Partidos
+              </mat-panel-description>
+            </mat-expansion-panel-header>
+            <div class="div-card" *ngFor="let partido of liguillas">
+              <mat-card (click)="onInformation(partido.Type, partido.MatchName, partido.Local, partido.Visit, 2)"
+                class="example-card" matBadge="F" matBadgeSize='large' matBadgeColor="accent"
+                [matBadgeHidden]="!partido.Finished">
+                <mat-card-header>
+                  <mat-card-title>
+                    <mat-icon style="margin-right:20px; vertical-align: middle;">schedule</mat-icon>
+                    {{partido.Date == null ? 'Sin definir' : partido.Date.toDate().toLocaleDateString('es-ES',{ weekday:
+                    'short', year: 'numeric', month: 'short', day: 'numeric', hour12: true, hour: 'numeric', minute:
+                    '2-digit' })}}
+                  </mat-card-title>
+                  <mat-card-subtitle>
+                    <mat-icon style="margin-right:20px; vertical-align: middle;">pause_presentation</mat-icon>
+                    {{partido.Field == null ? 'Sin definir' : 'Campo ' + partido.Field.Name}}
+                  </mat-card-subtitle>
+                </mat-card-header>
+                <mat-card-content>
+                  <div class="logo-card" style="float:left; width: 45%; text-align: center; margin-top: 10px;">
+                    <img width="50px" height="50px" [src]="partido.Local.LogoUrl || '../../assets/images/NoLogo.png'">
+                    <p matBadge="{{partido.GoalsLocal}}">{{partido.Local.Name}}</p>
+                  </div>
+                  <div style="float:left; width:10%; text-align: center; margin-top: 50px; font-weight: bold;">
+                    Vs
+                  </div>
+                  <div style="float: right; width: 45%; text-align: center; margin-top: 10px;">
+                    <img width="50px" height="50px" [src]="partido.Visit.LogoUrl || '../../assets/images/NoLogo.png'">
+                    <p matBadge="{{partido.GoalsVisit}}" matBadgePosition="before">{{partido.Visit.Name}}</p>
+                  </div>
+                </mat-card-content>
+              </mat-card>
+            </div>
+          </mat-expansion-panel>
+        </div>
+      </div>
+      <div *ngIf="liguillaFinal | async; let liguillas">
+        <div *ngIf="liguillas?.length > 0">
+          <mat-expansion-panel>
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                {{liguillas[0].Type}}
+              </mat-panel-title>
+              <mat-panel-description>
+                Partidos
+              </mat-panel-description>
+            </mat-expansion-panel-header>
+            <div class="div-card" *ngFor="let partido of liguillas">
+              <mat-card (click)="onInformation(partido.Type, partido.MatchName, partido.Local, partido.Visit, 2)"
+                class="example-card" matBadge="F" matBadgeSize='large' matBadgeColor="accent"
+                [matBadgeHidden]="!partido.Finished">
+                <mat-card-header>
+                  <mat-card-title>
+                    <mat-icon style="margin-right:20px; vertical-align: middle;">schedule</mat-icon>
+                    {{partido.Date == null ? 'Sin definir' : partido.Date.toDate().toLocaleDateString('es-ES',{ weekday:
+                      'short', year: 'numeric', month: 'short', day: 'numeric', hour12: true, hour: 'numeric', minute:
+                      '2-digit' })}}
+                  </mat-card-title>
+                  <mat-card-subtitle>
+                    <mat-icon style="margin-right:20px; vertical-align: middle;">pause_presentation</mat-icon>
+                    {{partido.Field == null ? 'Sin definir' : 'Campo ' + partido.Field.Name}}
+                  </mat-card-subtitle>
+                </mat-card-header>
+                <mat-card-content>
+                  <div class="logo-card" style="float:left; width: 45%; text-align: center; margin-top: 10px;">
+                    <img width="50px" height="50px" [src]="partido.Local.LogoUrl || '../../assets/images/NoLogo.png'">
+                    <p matBadge="{{partido.GoalsLocal}}">{{partido.Local.Name}}</p>
+                  </div>
+                  <div style="float:left; width:10%; text-align: center; margin-top: 50px; font-weight: bold;">
+                    Vs
+                  </div>
+                  <div style="float: right; width: 45%; text-align: center; margin-top: 10px;">
+                    <img width="50px" height="50px" [src]="partido.Visit.LogoUrl || '../../assets/images/NoLogo.png'">
+                    <p matBadge="{{partido.GoalsVisit}}" matBadgePosition="before">{{partido.Visit.Name}}</p>
+                  </div>
+                </mat-card-content>
+              </mat-card>
+            </div>
+          </mat-expansion-panel>
+        </div>
+      </div>
+      <div *ngIf="champion | async; let champ">
+        <div *ngIf="champ?.length > 0">
+          <mat-expansion-panel>
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                {{champ[0].Type}}
+              </mat-panel-title>
+              <mat-panel-description>
+                Equipo
+              </mat-panel-description>
+            </mat-expansion-panel-header>
+            <div class="div-card">
+              <mat-card class="example-card" disabled>
+                <mat-card-header>
+                  <mat-card-title>
+                    CAMPEÓN
+                  </mat-card-title>
+                </mat-card-header>
+                <mat-card-content>
+                  <div style="float:left; width: 100%; text-align: center; margin-top: 10px;">
+                    <img width="50px" height="50px" [src]="champ[0].Winner.LogoUrl || '../../assets/images/NoLogo.png'">
+                    <p>{{champ[0].Winner.Name}}</p>
+                  </div>
+                </mat-card-content>
+              </mat-card>
+            </div>
+          </mat-expansion-panel>
+        </div>
+      </div>
+    </mat-accordion>
+  </div>
+  <ng-template #noTournament>
+    <div class="no-tournament-label">No existen torneos generados.</div>
+  </ng-template>
 </div>
 <button class="fab-button" mat-fab color="primary" matTooltip="Nuevo torneo" (click)="openAddDialog()">
   <mat-icon>add</mat-icon>

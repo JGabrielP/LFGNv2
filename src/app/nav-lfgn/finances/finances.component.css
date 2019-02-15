@@ -35,3 +35,14 @@ tr.example-element-row:hover .icon {
 .icon {
     visibility: hidden;
 }
+
+.btn-report {
+    margin-top: 20px;
+}
+
+.no-finances-label {
+    text-align: center;
+    margin-top: 50px;
+    color: gray;
+    font-style: italic;
+}
