@@ -182,7 +182,7 @@ export class TournamentsMatchDetailsComponent implements OnInit {
     this.expansionActive = this.toggleCtrl.value;
   }
 
-  add(event: MatChipInputEvent, caseType: number): void {
+  add(event: MatChipInputEvent, caseType: number, team: Team): void {
     let input = event.input;
     let value = event.value;
     switch (caseType) {
@@ -194,7 +194,7 @@ export class TournamentsMatchDetailsComponent implements OnInit {
             FirstName: '',
             LastName: '',
             BirthDate: new Date,
-            Team: { Name: '', Id: '' },
+            Team: { Name: team.Name, Id: team.Id, LogoUrl: team.LogoUrl },
             Folio: 0
           });
         }
@@ -209,7 +209,7 @@ export class TournamentsMatchDetailsComponent implements OnInit {
             FirstName: '',
             LastName: '',
             BirthDate: new Date,
-            Team: { Name: '', Id: '' },
+            Team: { Name: team.Name, Id: team.Id, LogoUrl: team.LogoUrl },
             Folio: 0
           });
         }

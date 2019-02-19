@@ -101,42 +101,46 @@
                 <mat-list-item style="display:inline-block;">GOLEO</mat-list-item>
                 <img src="../../../../assets/images/Goals.png" width="20px" height="20px" style="display:inline;">
                 <mat-divider class="divider"></mat-divider>
-                <mat-form-field class="example-chip-list">
-                  <mat-chip-list #chipListGoalsLocal>
-                    <mat-chip *ngFor="let player of playersGoalLocal; let i = index;" [selectable]="selectable"
-                      [removable]="removable" (removed)="remove(i, 1)" [matTooltip]="player.Folio">
-                      {{player.Name + ' ' + player.FirstName + ' ' + player.LastName}}
-                      <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
-                    </mat-chip>
-                    <input placeholder="Goles local..." #playersGoalLocalInput [formControl]="goalsLocalCtrl"
-                      [matAutocomplete]="autoGoalsLocal" [matChipInputFor]="chipListGoalsLocal"
-                      [matChipInputSeparatorKeyCodes]="separatorKeysCodes" [matChipInputAddOnBlur]="addOnBlur"
-                      (matChipInputTokenEnd)="add($event, 1)">
-                  </mat-chip-list>
-                  <mat-autocomplete #autoGoalsLocal="matAutocomplete" (optionSelected)="selected($event, 1)">
-                    <mat-option *ngFor="let player of filteredGoalsLocal | async" [value]="player">
-                      {{player.Name + ' ' + player.FirstName + ' ' + player.LastName}}
-                    </mat-option>
-                  </mat-autocomplete>
-                </mat-form-field>
-                <mat-form-field class="example-chip-list">
-                  <mat-chip-list #chipListGoalsVisit>
-                    <mat-chip *ngFor="let player of playersGoalVisit; let i = index;" [selectable]="selectable"
-                      [removable]="removable" (removed)="remove(i, 2)" [matTooltip]="player.Folio">
-                      {{player.Name + ' ' + player.FirstName + ' ' + player.LastName}}
-                      <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
-                    </mat-chip>
-                    <input placeholder="Goles visita..." #playersGoalVisitInput [formControl]="goalsVisitCtrl"
-                      [matAutocomplete]="autoGoalsVisit" [matChipInputFor]="chipListGoalsVisit"
-                      [matChipInputSeparatorKeyCodes]="separatorKeysCodes" [matChipInputAddOnBlur]="addOnBlur"
-                      (matChipInputTokenEnd)="add($event, 2)">
-                  </mat-chip-list>
-                  <mat-autocomplete #autoGoalsVisit="matAutocomplete" (optionSelected)="selected($event, 2)">
-                    <mat-option *ngFor="let player of filteredGoalsVisit | async" [value]="player">
-                      {{player.Name + ' ' + player.FirstName + ' ' + player.LastName}}
-                    </mat-option>
-                  </mat-autocomplete>
-                </mat-form-field>
+                <div *ngFor="let localTeam of teamLocal | async">
+                  <mat-form-field class="example-chip-list">
+                    <mat-chip-list #chipListGoalsLocal>
+                      <mat-chip *ngFor="let player of playersGoalLocal; let i = index;" [selectable]="selectable"
+                        [removable]="removable" (removed)="remove(i, 1)" [matTooltip]="player.Folio">
+                        {{player.Name + ' ' + player.FirstName + ' ' + player.LastName}}
+                        <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+                      </mat-chip>
+                      <input placeholder="Goles local..." #playersGoalLocalInput [formControl]="goalsLocalCtrl"
+                        [matAutocomplete]="autoGoalsLocal" [matChipInputFor]="chipListGoalsLocal"
+                        [matChipInputSeparatorKeyCodes]="separatorKeysCodes" [matChipInputAddOnBlur]="addOnBlur"
+                        (matChipInputTokenEnd)="add($event, 1, localTeam)">
+                    </mat-chip-list>
+                    <mat-autocomplete #autoGoalsLocal="matAutocomplete" (optionSelected)="selected($event, 1)">
+                      <mat-option *ngFor="let player of filteredGoalsLocal | async" [value]="player">
+                        {{player.Name + ' ' + player.FirstName + ' ' + player.LastName}}
+                      </mat-option>
+                    </mat-autocomplete>
+                  </mat-form-field>
+                </div>
+                <div *ngFor="let visitTeam of teamVisit | async">
+                  <mat-form-field class="example-chip-list">
+                    <mat-chip-list #chipListGoalsVisit>
+                      <mat-chip *ngFor="let player of playersGoalVisit; let i = index;" [selectable]="selectable"
+                        [removable]="removable" (removed)="remove(i, 2)" [matTooltip]="player.Folio">
+                        {{player.Name + ' ' + player.FirstName + ' ' + player.LastName}}
+                        <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+                      </mat-chip>
+                      <input placeholder="Goles visita..." #playersGoalVisitInput [formControl]="goalsVisitCtrl"
+                        [matAutocomplete]="autoGoalsVisit" [matChipInputFor]="chipListGoalsVisit"
+                        [matChipInputSeparatorKeyCodes]="separatorKeysCodes" [matChipInputAddOnBlur]="addOnBlur"
+                        (matChipInputTokenEnd)="add($event, 2, visitTeam)">
+                    </mat-chip-list>
+                    <mat-autocomplete #autoGoalsVisit="matAutocomplete" (optionSelected)="selected($event, 2)">
+                      <mat-option *ngFor="let player of filteredGoalsVisit | async" [value]="player">
+                        {{player.Name + ' ' + player.FirstName + ' ' + player.LastName}}
+                      </mat-option>
+                    </mat-autocomplete>
+                  </mat-form-field>
+                </div>
               </div>
               <div>
                 <mat-list-item style="display:inline-block;">DISCIPLINARIA</mat-list-item>
