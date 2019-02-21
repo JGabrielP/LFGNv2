@@ -227,4 +227,8 @@ export class TournamentService {
   getCurrentTournament() {
     return this.afs.collection(this.afAuth.auth.currentUser.email).doc(this.afAuth.auth.currentUser.uid).collection('tournaments', ref => ref.orderBy('DateAdded', 'desc').limit(1)).valueChanges();
   }
+
+  async setMatchCurrent(nameMatchweek: string, nameTournament: string) {
+    return await this.afs.collection(this.afAuth.auth.currentUser.email).doc(this.afAuth.auth.currentUser.uid).collection('tournaments').doc(nameTournament).update({ MatchCurrent: nameMatchweek });
+  }
 }

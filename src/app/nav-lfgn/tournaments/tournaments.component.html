@@ -71,6 +71,9 @@
             </mat-card>
           </ng-template>
         </div>
+        <mat-action-row>
+          <button mat-button color="primary" (click)="publish('Jornada' + (i+1),currentTournament)">Publicar</button>
+        </mat-action-row>
       </mat-expansion-panel>
     </mat-accordion>
     <div

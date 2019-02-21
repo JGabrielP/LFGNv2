@@ -104,6 +104,11 @@ export class TournamentsComponent implements OnInit {
       });
     }
   }
+
+  async publish(nameMatchweek: string, nameTournament: string) {
+    await this.tournamentService.setMatchCurrent(nameMatchweek, nameTournament);
+    this.openSnackbar("Se ha publicado la " + nameMatchweek, "Hecho");
+  }
 }
 
 @Component({
