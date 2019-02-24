@@ -42,6 +42,8 @@ export class StatisticsService {
       const matches = await this.afs.collection(this.afAuth.auth.currentUser.email).doc(this.afAuth.auth.currentUser.uid).collection('tournaments').doc(nameTournament).collection('Jornadas').doc(matchweek.data().Name).collection('Partidos').ref.get();
       let a: number = 0;
       for (const match of matches.docs) {
+        if (match.data().Local.Id == "Descansa" || match.data().Visit.Id == "Descansa")
+          a++
         if (match.data().Finished) {
           a++;
           if (match.data().GoalsLocal > match.data().GoalsVisit) {

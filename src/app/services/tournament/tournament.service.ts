@@ -37,7 +37,7 @@ export class TournamentService {
       teams.splice(0, 1);
       let teamsSize = teams.length;
       let nJornada = 0;
-      this.tournamentsCollection.doc(nameTournament).set({ Name: nameTournament, DateAdded: new Date(), nTeams: Number(nTeams), nCards: nCards, nTimesLiguilla: Number(nTimesLiguilla) });
+      this.tournamentsCollection.doc(nameTournament).set({ Name: nameTournament, DateAdded: new Date(), nTeams: Number(nTeams), nCards: nCards, nTimesLiguilla: Number(nTimesLiguilla), MatchCurrent: "Jornada1" });
 
       for (let i = 0; i < nVueltas; i++) {
         for (let y = 0; y < nMatchweek; y++) {

@@ -111,8 +111,7 @@
                       </mat-chip>
                       <input placeholder="Goles local..." #playersGoalLocalInput [formControl]="goalsLocalCtrl"
                         [matAutocomplete]="autoGoalsLocal" [matChipInputFor]="chipListGoalsLocal"
-                        [matChipInputSeparatorKeyCodes]="separatorKeysCodes" [matChipInputAddOnBlur]="addOnBlur"
-                        (matChipInputTokenEnd)="add($event, 1, localTeam)">
+                        [matChipInputSeparatorKeyCodes]="separatorKeysCodes" [matChipInputAddOnBlur]="addOnBlur">
                     </mat-chip-list>
                     <mat-autocomplete #autoGoalsLocal="matAutocomplete" (optionSelected)="selected($event, 1)">
                       <mat-option *ngFor="let player of filteredGoalsLocal | async" [value]="player">
@@ -131,8 +130,7 @@
                       </mat-chip>
                       <input placeholder="Goles visita..." #playersGoalVisitInput [formControl]="goalsVisitCtrl"
                         [matAutocomplete]="autoGoalsVisit" [matChipInputFor]="chipListGoalsVisit"
-                        [matChipInputSeparatorKeyCodes]="separatorKeysCodes" [matChipInputAddOnBlur]="addOnBlur"
-                        (matChipInputTokenEnd)="add($event, 2, visitTeam)">
+                        [matChipInputSeparatorKeyCodes]="separatorKeysCodes" [matChipInputAddOnBlur]="addOnBlur">
                     </mat-chip-list>
                     <mat-autocomplete #autoGoalsVisit="matAutocomplete" (optionSelected)="selected($event, 2)">
                       <mat-option *ngFor="let player of filteredGoalsVisit | async" [value]="player">
@@ -155,8 +153,7 @@
                     </mat-chip>
                     <input placeholder="Amonestaciones local..." #playersYLocalInput [formControl]="YLocalCtrl"
                       [matAutocomplete]="autoYLocal" [matChipInputFor]="chipListYLocal"
-                      [matChipInputSeparatorKeyCodes]="separatorKeysCodes" [matChipInputAddOnBlur]="addOnBlur"
-                      (matChipInputTokenEnd)="add($event, 3)">
+                      [matChipInputSeparatorKeyCodes]="separatorKeysCodes" [matChipInputAddOnBlur]="addOnBlur">
                   </mat-chip-list>
                   <mat-autocomplete #autoYLocal="matAutocomplete" (optionSelected)="selected($event, 3)">
                     <mat-option *ngFor="let player of filteredYLocal | async" [value]="player">
@@ -173,8 +170,7 @@
                     </mat-chip>
                     <input placeholder="Amonestaciones visita..." #playersYVisitInput [formControl]="YVisitCtrl"
                       [matAutocomplete]="autoYVisit" [matChipInputFor]="chipListYVisit"
-                      [matChipInputSeparatorKeyCodes]="separatorKeysCodes" [matChipInputAddOnBlur]="addOnBlur"
-                      (matChipInputTokenEnd)="add($event, 4)">
+                      [matChipInputSeparatorKeyCodes]="separatorKeysCodes" [matChipInputAddOnBlur]="addOnBlur">
                   </mat-chip-list>
                   <mat-autocomplete #autoYVisit="matAutocomplete" (optionSelected)="selected($event, 4)">
                     <mat-option *ngFor="let player of filteredYVisit | async" [value]="player">
@@ -191,8 +187,7 @@
                     </mat-chip>
                     <input placeholder="Expulsiones local..." #playersRLocalInput [formControl]="RLocalCtrl"
                       [matAutocomplete]="autoRLocal" [matChipInputFor]="chipListRLocal"
-                      [matChipInputSeparatorKeyCodes]="separatorKeysCodes" [matChipInputAddOnBlur]="addOnBlur"
-                      (matChipInputTokenEnd)="add($event, 5)">
+                      [matChipInputSeparatorKeyCodes]="separatorKeysCodes" [matChipInputAddOnBlur]="addOnBlur">
                   </mat-chip-list>
                   <mat-autocomplete #autoRLocal="matAutocomplete" (optionSelected)="selected($event, 5)">
                     <mat-option *ngFor="let player of filteredRLocal | async" [value]="player">
@@ -209,8 +204,7 @@
                     </mat-chip>
                     <input placeholder="Expulsiones visita..." #playersRVisitInput [formControl]="RVisitCtrl"
                       [matAutocomplete]="autoRVisit" [matChipInputFor]="chipListRVisit"
-                      [matChipInputSeparatorKeyCodes]="separatorKeysCodes" [matChipInputAddOnBlur]="addOnBlur"
-                      (matChipInputTokenEnd)="add($event, 6)">
+                      [matChipInputSeparatorKeyCodes]="separatorKeysCodes" [matChipInputAddOnBlur]="addOnBlur">
                   </mat-chip-list>
                   <mat-autocomplete #autoRVisit="matAutocomplete" (optionSelected)="selected($event, 6)">
                     <mat-option *ngFor="let player of filteredRVisit | async" [value]="player">

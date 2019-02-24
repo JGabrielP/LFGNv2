@@ -55,7 +55,8 @@
         </mat-form-field>
         <button mat-flat-button color="primary" (click)="addPlayerList()">Agregar</button><br>
         <div id="player-registered" *ngFor="let player of players">
-          <img [src]=" player.PhotoUrl || '../../../assets/images/NoLogo.png' " class="photo-size" matTooltip="{{player.Name}} {{player.FirstName}} {{player.LastName}}">
+          <img [src]=" player.PhotoUrl || '../../../assets/images/NoPhotoPlayer.png' " class="photo-size"
+            matTooltip="{{player.Name}} {{player.FirstName}} {{player.LastName}}">
           <button mat-icon-button color="primary" (click)="removePlayer(player)">
             <mat-icon class="material-icons md-18">clear</mat-icon>
           </button>

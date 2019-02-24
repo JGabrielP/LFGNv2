@@ -4,6 +4,7 @@ import { NgModule } from '@angular/core';
 import { MaterialModule } from './material.module';
 import 'hammerjs';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { HttpClientModule } from '@angular/common/http';
 
 //FIREBASE
 import { AngularFireModule } from '@angular/fire';
@@ -76,6 +77,7 @@ import { DashboardComponent } from './nav-lfgn/dashboard/dashboard.component';
     BrowserModule,
     FormsModule,
     ReactiveFormsModule,
+    HttpClientModule,
     AngularFireModule.initializeApp(environment.firebase),
     AngularFireAuthModule,
     AngularFireStorageModule,

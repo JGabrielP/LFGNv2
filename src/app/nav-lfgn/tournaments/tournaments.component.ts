@@ -8,6 +8,9 @@ import { Field } from 'src/app/models/field/field';
 import { Router } from '@angular/router';
 import { Team } from 'src/app/models/team/team';
 import { TeamService } from 'src/app/services/team/team.service';
+import { HttpHeaders, HttpClient } from '@angular/common/http';
+import * as jspdf from 'jspdf';
+import html2canvas from 'html2canvas';
 
 @Component({
   selector: 'app-tournaments',
@@ -23,8 +26,9 @@ export class TournamentsComponent implements OnInit {
   public liguillaSemifinales: Observable<any[]>;
   public liguillaFinal: Observable<any[]>;
   public champion: Observable<any[]>;
+  public newPost: Observable<any>;
 
-  constructor(private tournamentService: TournamentService, private dialog: MatDialog, private snackBar: MatSnackBar, private fieldService: FieldService, private router: Router) { }
+  constructor(private http: HttpClient, private tournamentService: TournamentService, private dialog: MatDialog, private snackBar: MatSnackBar, private fieldService: FieldService, private router: Router) { }
 
   async ngOnInit() {
     this.tournaments = await this.tournamentService.getTournaments();
@@ -107,7 +111,46 @@ export class TournamentsComponent implements OnInit {
 
   async publish(nameMatchweek: string, nameTournament: string) {
     await this.tournamentService.setMatchCurrent(nameMatchweek, nameTournament);
-    this.openSnackbar("Se ha publicado la " + nameMatchweek, "Hecho");
+    this.createPost(nameMatchweek);
+  }
+
+  createPost(nameMatchweek: string) {
+    let url = 'https://fcm.googleapis.com/fcm/send';
+    let body = {
+      "to": "/topics/all",
+      "notification": {
+        "title": "LFGN: Actualización " + nameMatchweek,
+        "body": "Se han asignado los horarios o definido resultados de los partidos de esta jornada.",
+        "sound": "default"
+      }, "data": {
+        "title": "LFGN: Actualización de " + nameMatchweek,
+        "body": "Se han asignado los horarios o definido resultados de los partidos de esta jornada."
+      },
+      "priority": "high"
+    }
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        'Authorization': 'key=AAAAllJLXOg:APA91bGUZZkCK1pjcLcNpMB4w58ckLfbMOg8v9TZIW6XrboXMz0EMVTzXGlh3QOVJKCZf_RpuT1HzSVUFmYrio1pkO_GL_lII3tokOCedZH68c7MVrmqvGSNFSVId9YAPKrWcVJluHBl'
+      })
+    };
+    this.http.post(url, body, httpOptions).subscribe(() => {
+      this.openSnackbar("Se ha publicado " + nameMatchweek, "Hecho");
+    });
+  }
+
+  generateReport(i: number) {
+    console.log('panelMatch' + i);
+    var data = document.getElementById('panelMatch' + i);
+    html2canvas(data).then(canvas => {
+      var imgWidth = 190;
+      var imgHeight = canvas.height * imgWidth / canvas.width;
+      const contentDataURL = canvas.toDataURL('image/png')
+      let pdf = new jspdf();
+      pdf.text('Jornada ' + i, 10, 20)
+      pdf.addImage(contentDataURL, 'PNG', 10, 30, imgWidth, imgHeight)
+      pdf.save('ReporteJornada' + i + '.pdf');
+    });
   }
 }
 

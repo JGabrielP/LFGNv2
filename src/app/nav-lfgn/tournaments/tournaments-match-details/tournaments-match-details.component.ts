@@ -56,13 +56,13 @@ export class TournamentsMatchDetailsComponent implements OnInit {
   public goalsLocalCtrl = new FormControl();
   public filteredGoalsLocal: Observable<Player[]>;
   public playersGoalLocal: Player[] = [];
-  public allPlayersLocal: Player[];
+  public allPlayersLocal: Player[] = [];
 
   @ViewChild('playersGoalVisitInput') playersGoalVisitInput: ElementRef<HTMLInputElement>;
   public goalsVisitCtrl = new FormControl();
   public filteredGoalsVisit: Observable<Player[]>;
   public playersGoalVisit: Player[] = [];
-  public allPlayersVisit: Player[];
+  public allPlayersVisit: Player[] = [];
 
   @ViewChild('playersYLocalInput') playersYLocalInput: ElementRef<HTMLInputElement>;
   public YLocalCtrl = new FormControl();
@@ -93,6 +93,7 @@ export class TournamentsMatchDetailsComponent implements OnInit {
       this.allPlayersLocal = players.map((playerList: Player) => playerList);
       this.allPlayersYLocal = players.map((playerList: Player) => playerList);
       this.allPlayersRLocal = players.map((playerList: Player) => playerList);
+
       this.filteredGoalsLocal = this.goalsLocalCtrl.valueChanges.pipe(
         startWith(null),
         map((player: string | null) => player ? this._filter(player, 1) : this.allPlayersLocal.slice()));
@@ -102,6 +103,15 @@ export class TournamentsMatchDetailsComponent implements OnInit {
       this.filteredRLocal = this.RLocalCtrl.valueChanges.pipe(
         startWith(null),
         map((player: string | null) => player ? this._filter(player, 5) : this.allPlayersRLocal.slice()));
+      this.allPlayersLocal.push({
+        Id: Math.random().toString(),
+        Name: "AUTOGOL",
+        FirstName: '',
+        LastName: '',
+        BirthDate: new Date,
+        Team: this.allPlayersLocal[0].Team,
+        Folio: 0
+      });
     });
     this.playerService.getPlayers(this.route.snapshot.queryParamMap.get('visit')).subscribe(players => {
       this.allPlayersVisit = players.map((playerList: Player) => playerList);
@@ -116,6 +126,15 @@ export class TournamentsMatchDetailsComponent implements OnInit {
       this.filteredRVisit = this.RVisitCtrl.valueChanges.pipe(
         startWith(null),
         map((player: string | null) => player ? this._filter(player, 6) : this.allPlayersRVisit.slice()));
+      this.allPlayersVisit.push({
+        Id: Math.random().toString(),
+        Name: "AUTOGOL",
+        FirstName: '',
+        LastName: '',
+        BirthDate: new Date,
+        Team: this.allPlayersVisit[0].Team,
+        Folio: 0
+      });
     });
   }
 
@@ -180,46 +199,6 @@ export class TournamentsMatchDetailsComponent implements OnInit {
 
   onChange() {
     this.expansionActive = this.toggleCtrl.value;
-  }
-
-  add(event: MatChipInputEvent, caseType: number, team: Team): void {
-    let input = event.input;
-    let value = event.value;
-    switch (caseType) {
-      case 1:
-        if ((value || '').trim()) {
-          this.playersGoalLocal.push({
-            Id: Math.random().toString(),
-            Name: value.trim(),
-            FirstName: '',
-            LastName: '',
-            BirthDate: new Date,
-            Team: { Name: team.Name, Id: team.Id, LogoUrl: team.LogoUrl },
-            Folio: 0
-          });
-        }
-        if (input) input.value = '';
-        this.goalsLocalCtrl.setValue(null);
-        break;
-      case 2:
-        if ((value || '').trim()) {
-          this.playersGoalVisit.push({
-            Id: Math.random().toString(),
-            Name: value.trim(),
-            FirstName: '',
-            LastName: '',
-            BirthDate: new Date,
-            Team: { Name: team.Name, Id: team.Id, LogoUrl: team.LogoUrl },
-            Folio: 0
-          });
-        }
-        if (input) input.value = '';
-        this.goalsVisitCtrl.setValue(null);
-        break;
-      default:
-        break;
-    }
-
   }
 
   remove(index: number, caseType: number): void {
