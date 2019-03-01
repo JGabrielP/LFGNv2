@@ -140,7 +140,6 @@ export class TournamentsComponent implements OnInit {
   }
 
   generateReport(i: number) {
-    console.log('panelMatch' + i);
     var data = document.getElementById('panelMatch' + i);
     html2canvas(data).then(canvas => {
       var imgWidth = 190;
@@ -150,6 +149,19 @@ export class TournamentsComponent implements OnInit {
       pdf.text('Jornada ' + i, 10, 20)
       pdf.addImage(contentDataURL, 'PNG', 10, 30, imgWidth, imgHeight)
       pdf.save('ReporteJornada' + i + '.pdf');
+    });
+  }
+
+  generateReportLiguilla(name: string) {
+    var data = document.getElementById('panelMatch' + name);
+    html2canvas(data).then(canvas => {
+      var imgWidth = 190;
+      var imgHeight = canvas.height * imgWidth / canvas.width;
+      const contentDataURL = canvas.toDataURL('image/png')
+      let pdf = new jspdf();
+      pdf.text(name, 10, 20)
+      pdf.addImage(contentDataURL, 'PNG', 10, 30, imgWidth, imgHeight)
+      pdf.save('Reporte ' + name + '.pdf');
     });
   }
 }
