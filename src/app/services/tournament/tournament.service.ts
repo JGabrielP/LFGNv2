@@ -44,7 +44,7 @@ export class TournamentService {
           let teamIdx = y % teamsSize;
           let npartido = 1;
           nJornada++;
-          this.tournamentsCollection.doc(nameTournament + '/Jornadas/Jornada' + nJornada).set({ Name: 'Jornada' + nJornada });
+          this.tournamentsCollection.doc(nameTournament + '/Jornadas/Jornada' + nJornada).set({ Name: 'Jornada' + nJornada, nJornada: nJornada });
           if (i == 0)
             //console.log(teams[teamIdx].Name + " vs " + ListTeam[0].Name);
             this.tournamentsCollection.doc(nameTournament).collection('Jornadas').doc('Jornada' + nJornada).collection('Partidos').doc('Partido' + npartido++).set({ Local: teams[teamIdx], Visit: ListTeam[0], Finished: false });

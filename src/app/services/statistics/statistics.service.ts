@@ -1,22 +1,27 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
-import { StatsTeam } from 'src/app/models/statsTeam/stats-team';
 import { Player } from 'src/app/models/player/player';
 import { AngularFireAuth } from '@angular/fire/auth';
+import { StatsTeam } from 'src/app/models/statsTeam/stats-team';
+import { Team } from 'src/app/models/team/team';
 
 @Injectable({
   providedIn: 'root'
 })
 export class StatisticsService {
 
+  public table: StatsTeam[];
+  public tableLeaderGoal: any[];
+  public tableLeaderYCard: any[];
+
   constructor(private afs: AngularFirestore, private afAuth: AngularFireAuth) { }
 
   get(nameTournament: string) {
-    return this.afs.collection(this.afAuth.auth.currentUser.email).doc(this.afAuth.auth.currentUser.uid).collection('leaderboard').doc(nameTournament).collection('table').valueChanges();
+    return this.afs.collection(this.afAuth.auth.currentUser.email).doc(this.afAuth.auth.currentUser.uid).collection('leaderboard').doc(nameTournament).collection('table', ref => ref.orderBy("pts", "desc").orderBy("dg", "desc").orderBy("gf", "desc")).valueChanges();
   }
 
   getLeadergoal(nameTournament: string) {
-    return this.afs.collection(this.afAuth.auth.currentUser.email).doc(this.afAuth.auth.currentUser.uid).collection('leadergoal').doc(nameTournament).collection('table').valueChanges();
+    return this.afs.collection(this.afAuth.auth.currentUser.email).doc(this.afAuth.auth.currentUser.uid).collection('leadergoal').doc(nameTournament).collection('table', ref => ref.orderBy('nGoals', 'desc')).valueChanges();
   }
 
   getLeadergoalPlayer(nameTournament: string) {
@@ -31,50 +36,92 @@ export class StatisticsService {
     return this.afs.collection(this.afAuth.auth.currentUser.email).doc(this.afAuth.auth.currentUser.uid).collection('leaderYCards').doc(nameTournament).collection('table').valueChanges();
   }
 
-  async setLeaderboard(nameTournament: string) {
-    await this.cleanLeaderboard(nameTournament);
-    await this.cleanLeadergoal(nameTournament);
-    await this.cleanLeaderYCard(nameTournament);
-    const matchweeks = await this.afs.collection(this.afAuth.auth.currentUser.email).doc(this.afAuth.auth.currentUser.uid).collection('tournaments').doc(nameTournament).collection('Jornadas').ref.get();
-    let i: number = 0;
-    for (const matchweek of matchweeks.docs) {
-      i++;
-      const matches = await this.afs.collection(this.afAuth.auth.currentUser.email).doc(this.afAuth.auth.currentUser.uid).collection('tournaments').doc(nameTournament).collection('Jornadas').doc(matchweek.data().Name).collection('Partidos').ref.get();
-      let a: number = 0;
-      for (const match of matches.docs) {
-        if (match.data().Local.Id == "Descansa" || match.data().Visit.Id == "Descansa")
-          a++
-        if (match.data().Finished) {
-          a++;
-          if (match.data().GoalsLocal > match.data().GoalsVisit) {
-            await this.updateLeaderboard(match.data().Local.Id, match.data().GoalsLocal, match.data().GoalsVisit, 'win', nameTournament);
-            await this.updateLeaderboard(match.data().Visit.Id, match.data().GoalsVisit, match.data().GoalsLocal, 'lose', nameTournament);
-          } else if (match.data().GoalsVisit > match.data().GoalsLocal) {
-            await this.updateLeaderboard(match.data().Visit.Id, match.data().GoalsVisit, match.data().GoalsLocal, 'win', nameTournament);
-            await this.updateLeaderboard(match.data().Local.Id, match.data().GoalsLocal, match.data().GoalsVisit, 'lose', nameTournament);
-          } else {
-            await this.updateLeaderboard(match.data().Local.Id, match.data().GoalsLocal, match.data().GoalsVisit, 'equal', nameTournament);
-            await this.updateLeaderboard(match.data().Visit.Id, match.data().GoalsVisit, match.data().GoalsLocal, 'equal', nameTournament);
-          }
-          if (match.data().hasOwnProperty('GoalsPlayersLocal') && match.data().hasOwnProperty('GoalsPlayersVisit'))
-            await this.setLeadergoal(match.data().GoalsPlayersLocal, match.data().GoalsPlayersVisit, nameTournament);
-          if (match.data().hasOwnProperty('YCardsLocal') && match.data().hasOwnProperty('YCardsVisit'))
-            await this.setLeaderYCard(match.data().YCardsLocal, match.data().YCardsVisit, nameTournament, i);
-          if (i == matchweeks.size && a == matches.size)
-            this.generateLiguilla(nameTournament);
+  async setLeaderboard(nameTournament: string): Promise<any> {
+    return new Promise(async (resolve, reject) => {
+      this.table = [];
+      this.tableLeaderGoal = [];
+      this.tableLeaderYCard = [];
+      await this.setStatisticsByTournament(nameTournament);
+      await this.save(this.afs.collection(this.afAuth.auth.currentUser.email).doc(this.afAuth.auth.currentUser.uid).collection('leaderboard').doc(nameTournament).collection('table'), this.table);
+      await this.save(this.afs.collection(this.afAuth.auth.currentUser.email).doc(this.afAuth.auth.currentUser.uid).collection('leadergoal').doc(nameTournament).collection('table'), this.tableLeaderGoal);
+      await this.save(this.afs.collection(this.afAuth.auth.currentUser.email).doc(this.afAuth.auth.currentUser.uid).collection('leaderYCards').doc(nameTournament).collection('table'), this.tableLeaderYCard);
+      resolve();
+    });
+  }
+
+  save(ref: any, data: any[]): Promise<any> {
+    return new Promise((resolve, reject) => {
+      const batch = this.afs.firestore.batch();
+      const batch2 = this.afs.firestore.batch();
+      ref.get().subscribe(async collection => {
+        collection.forEach(document => {
+          batch.delete(document.ref);
+        });
+        await batch.commit();
+        data.forEach(a => {
+          batch2.set(ref.doc(this.afs.createId()).ref, a);
+        });
+        await batch2.commit();
+        resolve();
+      });
+    });
+  }
+
+  setStatisticsByTournament(nameTournament: string): Promise<any> {
+    return new Promise((resolve, reject) => {
+      this.afs.collection(this.afAuth.auth.currentUser.email).doc(this.afAuth.auth.currentUser.uid).collection('tournaments').doc(nameTournament).collection('Jornadas', ref => ref.orderBy("nJornada")).get().subscribe(async matchweeks => {
+        let i: number = 0;
+        for (const matchweek of matchweeks.docs) {
+          i++;
+          await this.setStatistics(nameTournament, matchweek, i, matchweeks);
         }
-      }
-    }
-    await this.sortTable(nameTournament);
-    await this.sortTableLeadergoal(nameTournament);
+        resolve();
+      });
+    });
+  }
+
+  setStatistics(nameTournament: string, matchweek, i: number, matchweeks): Promise<any> {
+    return new Promise((resolve, reject) => {
+      this.afs.collection(this.afAuth.auth.currentUser.email).doc(this.afAuth.auth.currentUser.uid).collection('tournaments').doc(nameTournament).collection('Jornadas').doc(matchweek.data().Name).collection('Partidos').get().subscribe(async matches => {
+        let a: number = 0;
+        for (const match of matches.docs) {
+          if (match.data().Local.Id == "Descansa" || match.data().Visit.Id == "Descansa")
+            a++
+          if (match.data().Finished) {
+            a++;
+            if (match.data().GoalsLocal > match.data().GoalsVisit) {
+              this.setLeaderBoard(match.data().Local, match.data().GoalsLocal, match.data().GoalsVisit, 'win');
+              this.setLeaderBoard(match.data().Visit, match.data().GoalsVisit, match.data().GoalsLocal, 'lose');
+            } else if (match.data().GoalsVisit > match.data().GoalsLocal) {
+              this.setLeaderBoard(match.data().Visit, match.data().GoalsVisit, match.data().GoalsLocal, 'win');
+              this.setLeaderBoard(match.data().Local, match.data().GoalsLocal, match.data().GoalsVisit, 'lose');
+            } else {
+              this.setLeaderBoard(match.data().Local, match.data().GoalsLocal, match.data().GoalsVisit, 'equal');
+              this.setLeaderBoard(match.data().Visit, match.data().GoalsVisit, match.data().GoalsLocal, 'equal');
+            }
+            if (match.data().hasOwnProperty('GoalsPlayersLocal') && match.data().hasOwnProperty('GoalsPlayersVisit')) {
+              this.setLeaderGoal(match.data().GoalsPlayersLocal);
+              this.setLeaderGoal(match.data().GoalsPlayersVisit);
+            }
+            if (match.data().hasOwnProperty('YCardsLocal') && match.data().hasOwnProperty('YCardsVisit')) {
+              this.setLeaderYCard(match.data().YCardsLocal, i);
+              this.setLeaderYCard(match.data().YCardsVisit, i);
+            }
+            if (i == matchweeks.size && a == matches.size)
+              this.generateLiguilla(nameTournament);
+          }
+        }
+        resolve();
+      });
+    });
   }
 
   async generateLiguilla(nameTournament: string) {
     let round: string;
-    await this.sortTable(nameTournament);
+    //await this.sortTable(nameTournament);
     this.afs.collection(this.afAuth.auth.currentUser.email).doc(this.afAuth.auth.currentUser.uid).
       collection("tournaments").doc(nameTournament).get().subscribe(w => {
-        const a = this.afs.collection(this.afAuth.auth.currentUser.email + '/' + this.afAuth.auth.currentUser.uid + "/" + "leaderboard" + "/" + nameTournament + "/" + 'table', ref => ref.orderBy('pos').limit(w.data().nTeams)).valueChanges();
+        const a = this.afs.collection(this.afAuth.auth.currentUser.email + '/' + this.afAuth.auth.currentUser.uid + "/" + "leaderboard" + "/" + nameTournament + "/" + 'table', ref => ref.orderBy("pts", "desc").orderBy("dg", "desc").orderBy("gf", "desc").limit(w.data().nTeams)).valueChanges();
         a.subscribe((c: any) => {
           switch (w.data().nTeams) {
             case 2:
@@ -111,146 +158,73 @@ export class StatisticsService {
       });
   }
 
-  async cleanLeaderYCard(nameTournament: string) {
-    const getReg = () => {
-      return this.afs.collection(this.afAuth.auth.currentUser.email).doc(this.afAuth.auth.currentUser.uid).collection('leaderYCards').doc(nameTournament).collection('table').ref.get();
-    }
-    const registros = await getReg();
-    for (const iterator of registros.docs)
-      await iterator.ref.update({ nYCards: 0 });
-  }
-
-  setLeaderYCard(YCardsLocal: Player[], YCardsVisit: Player[], nameTournament: string, nJornada: number) {
-    this.setYCard(YCardsLocal, nameTournament, nJornada);
-    this.setYCard(YCardsVisit, nameTournament, nJornada);
-  }
-
-  setYCard(arrayPlayer, nameTournament: string, nJornada: number) {
-    const getPlayerLeaderYCard = (playerId) => { return this.afs.collection(this.afAuth.auth.currentUser.email).doc(this.afAuth.auth.currentUser.uid).collection("leaderYCards").doc(nameTournament).collection('table').ref.where("Player.Id", "==", playerId).get(); }
-    const cards = () => { return this.afs.collection(this.afAuth.auth.currentUser.email).doc(this.afAuth.auth.currentUser.uid).collection("tournaments").doc(nameTournament).get(); }
-    arrayPlayer.forEach(async cardPlayer => {
-      const player = await getPlayerLeaderYCard(cardPlayer.Id);
-      if (player.size > 0) {
-        const nCardsY = await cards();
-        nCardsY.subscribe(async x => {
-          if (player.docs[0].data().nYCards + 1 == x.data().nCards + 1)
-            await this.afs.collection(this.afAuth.auth.currentUser.email).doc(this.afAuth.auth.currentUser.uid).
-              collection("leaderYCards").doc(nameTournament).collection('table').doc(cardPlayer.Id).
-              update({ nYCards: 1, LastMatchweek: nJornada });
-          else
-            await this.afs.collection(this.afAuth.auth.currentUser.email).doc(this.afAuth.auth.currentUser.uid).
-              collection("leaderYCards").doc(nameTournament).collection('table').doc(cardPlayer.Id).
-              update({ nYCards: player.docs[0].data().nYCards + 1, LastMatchweek: nJornada });
-        });
-      }
-      else
-        await this.afs.collection(this.afAuth.auth.currentUser.email).doc(this.afAuth.auth.currentUser.uid).
-          collection("leaderYCards").doc(nameTournament).collection('table').doc(cardPlayer.Id).
-          set({ Player: cardPlayer, nYCards: 1, LastMatchweek: nJornada });
-    });
-  }
-
-  async updateLeaderboard(idTeam: string, gf: number, gc: number, status: string, nameTournament: string) {
-    const getTeamTable = (id) => { return this.afs.collection(this.afAuth.auth.currentUser.email).doc(this.afAuth.auth.currentUser.uid).collection("leaderboard").doc(nameTournament).collection('table').ref.where("team.Id", "==", id).get(); }
-    const team = await getTeamTable(idTeam);
-    if (!status.localeCompare('win'))
-      return await this.afs.collection(this.afAuth.auth.currentUser.email).doc(this.afAuth.auth.currentUser.uid).collection('leaderboard').doc(nameTournament).collection('table').doc(idTeam).update({ pts: team.docs[0].data().pts + 3, jj: team.docs[0].data().jj + 1, dg: team.docs[0].data().dg + gf - gc, jg: team.docs[0].data().jg + 1, gf: team.docs[0].data().gf + gf, gc: team.docs[0].data().gc + gc });
-    else if (!status.localeCompare('lose'))
-      return await this.afs.collection(this.afAuth.auth.currentUser.email).doc(this.afAuth.auth.currentUser.uid).collection('leaderboard').doc(nameTournament).collection('table').doc(idTeam).update({ jj: team.docs[0].data().jj + 1, dg: team.docs[0].data().dg + gf - gc, jp: team.docs[0].data().jp + 1, gf: team.docs[0].data().gf + gf, gc: team.docs[0].data().gc + gc });
-    else
-      return await this.afs.collection(this.afAuth.auth.currentUser.email).doc(this.afAuth.auth.currentUser.uid).collection('leaderboard').doc(nameTournament).collection('table').doc(idTeam).update({ pts: team.docs[0].data().pts + 1, jj: team.docs[0].data().jj + 1, dg: team.docs[0].data().dg + gf - gc, je: team.docs[0].data().je + 1, gf: team.docs[0].data().gf + gf, gc: team.docs[0].data().gc + gc });
-  }
-
-  async cleanLeaderboard(nameTournament: string) {
-    const getReg = () => {
-      return this.afs.collection(this.afAuth.auth.currentUser.email).doc(this.afAuth.auth.currentUser.uid).collection('leaderboard').doc(nameTournament).collection('table').ref.get();
-    }
-    const registros = await getReg();
-    for (const iterator of registros.docs)
-      await iterator.ref.update({ pts: 0, jj: 0, dg: 0, jg: 0, je: 0, jp: 0, gf: 0, gc: 0 });
-  }
-
-  async cleanLeadergoal(nameTournament: string) {
-    const getReg = () => {
-      return this.afs.collection(this.afAuth.auth.currentUser.email).doc(this.afAuth.auth.currentUser.uid).collection('leadergoal').doc(nameTournament).collection('table').ref.get();
-    }
-    const registros = await getReg();
-    for (const iterator of registros.docs)
-      await iterator.ref.update({ nGoals: 0 });
-  }
-
-  async sortTable(nameTournament: string) {
-    let TABLA: any[] = [], SOR: StatsTeam[] = [];
-    const a = await this.afs.collection(this.afAuth.auth.currentUser.email).doc(this.afAuth.auth.currentUser.uid).collection('leaderboard').doc(nameTournament).collection('table').ref.get();
-    for (const iterator of a.docs)
-      TABLA.push(iterator.data());
-    SOR = await TABLA.sort((a: any, b: any) => {
-      if (a.pts > b.pts)
-        return -1;
-      if (a.pts < b.pts)
-        return 1;
-      if (a.pts == a.pts) {
-        if (a.dg > b.dg)
-          return -1;
-        if (a.dg < b.dg)
-          return 1;
-        if (a.dg == b.dg) {
-          if (a.gf > b.gf)
-            return -1;
-          if (a.gf < b.gf)
-            return 1;
+  setLeaderYCard(players: Player[], nJornada: number) {
+    players.forEach((player: Player) => {
+      if (this.tableLeaderYCard.some(cardYPlayer => cardYPlayer.Player.Id.includes(player.Id))) {
+        let playerTable = this.tableLeaderYCard.find(cardYPlayer => cardYPlayer.Player.Id === player.Id);
+        if (playerTable.nYCards + 1 == 4) {
+          playerTable.nYCards = 1;
+          playerTable.LastMatchweek = nJornada;
+        } else {
+          playerTable.nYCards += 1;
+          playerTable.LastMatchweek = nJornada;
         }
       }
-    });
-    for (let i = 0; i < SOR.length; i++) {
-      await this.afs.collection(this.afAuth.auth.currentUser.email).doc(this.afAuth.auth.currentUser.uid).collection("leaderboard").doc(nameTournament).collection('table').doc(SOR[i].team.Id).update({ pos: (i + 1) });
-    }
-  }
-
-  async setLeadergoal(goalsLocal: Player[], goalsVisit: Player[], nameTournament: string) {
-    this.setPlayersLeaderSum(this.getPlayersGoalsSum(goalsLocal), nameTournament);
-    this.setPlayersLeaderSum(this.getPlayersGoalsSum(goalsVisit), nameTournament);
-  }
-
-  setPlayersLeaderSum(arrayPlayer, nameTournament: string) {
-    const getPlayerLeadergoal = (playerId) => { return this.afs.collection(this.afAuth.auth.currentUser.email).doc(this.afAuth.auth.currentUser.uid).collection("leadergoal").doc(nameTournament).collection('table').ref.where("Player.Id", "==", playerId).get(); }
-    arrayPlayer.forEach(async goalPlayer => {
-      const player = await getPlayerLeadergoal(goalPlayer.player.Id);
-      if (player.size > 0)
-        this.afs.collection(this.afAuth.auth.currentUser.email).doc(this.afAuth.auth.currentUser.uid).collection("leadergoal").doc(nameTournament).collection('table').doc(goalPlayer.player.Id).update({ nGoals: player.docs[0].data().nGoals + goalPlayer.nGoals });
       else
-        this.afs.collection(this.afAuth.auth.currentUser.email).doc(this.afAuth.auth.currentUser.uid).collection("leadergoal").doc(nameTournament).collection('table').doc(goalPlayer.player.Id).set({ Player: goalPlayer.player, nGoals: goalPlayer.nGoals });
+        this.tableLeaderYCard.push({ Player: player, nYCards: 1, LastMatchweek: nJornada });
     });
   }
 
-  getPlayersGoalsSum(arrayPlayers: Player[]) {
-    let goals: any[] = [];
-    arrayPlayers.forEach((goalPlayer: Player) => {
-      if (!goals.some(element => element.player.Id.includes(goalPlayer.Id)))
-        goals.push({ player: goalPlayer, nGoals: 1 });
-      else
-        goals.find(x => x.player.Id === goalPlayer.Id).nGoals += 1;
-    });
-    return goals;
+  setLeaderBoard(team: Team, gf: number, gc: number, status: string) {
+    if (this.table.some(teamTable => teamTable.team.Id.includes(team.Id))) {
+      let index = this.table.findIndex(x => x.team.Id === team.Id);
+      let teamTable = this.table.find(x => x.team.Id === team.Id);
+      switch (status) {
+        case 'win':
+          this.table[index].pts = teamTable.pts + 3;
+          this.table[index].jj = teamTable.jj + 1;
+          this.table[index].dg = teamTable.dg + gf - gc;
+          this.table[index].jg = teamTable.jg + 1;
+          this.table[index].gf = teamTable.gf + gf;
+          this.table[index].gc = teamTable.gc + gc;
+          break;
+        case 'lose':
+          this.table[index].jj = teamTable.jj + 1;
+          this.table[index].dg = teamTable.dg + gf - gc;
+          this.table[index].jp = teamTable.jp + 1;
+          this.table[index].gf = teamTable.gf + gf;
+          this.table[index].gc = teamTable.gc + gc;
+          break;
+        case 'equal':
+          this.table[index].pts = teamTable.pts + 1;
+          this.table[index].jj = teamTable.jj + 1;
+          this.table[index].dg = teamTable.dg + gf - gc;
+          this.table[index].je = teamTable.je + 1;
+          this.table[index].gf = teamTable.gf + gf;
+          this.table[index].gc = teamTable.gc + gc;
+          break;
+      }
+    } else {
+      switch (status) {
+        case 'win':
+          this.table.push({ pts: 3, jj: 1, dg: gf - gc, jg: 1, je: 0, jp: 0, gf: gf, gc: gc, pos: 0, team: team });
+          break;
+        case 'lose':
+          this.table.push({ pts: 0, jj: 1, dg: gf - gc, jg: 0, je: 0, jp: 1, gf: gf, gc: gc, pos: 0, team: team });
+          break;
+        case 'equal':
+          this.table.push({ pts: 1, jj: 1, dg: gf - gc, jg: 0, je: 1, jp: 0, gf: gf, gc: gc, pos: 0, team: team });
+          break;
+      }
+    }
   }
 
-  async sortTableLeadergoal(nameTournament: string) {
-    let TABLA: any[] = [], SOR: any[] = [];
-    const a = await this.afs.collection(this.afAuth.auth.currentUser.email).doc(this.afAuth.auth.currentUser.uid).collection('leadergoal').doc(nameTournament).collection('table').ref.get();
-    for (const iterator of a.docs) {
-      if (iterator.data().nGoals == 0)
-        await iterator.ref.delete();
+  setLeaderGoal(players: Player[]) {
+    players.forEach((player: Player) => {
+      if (this.tableLeaderGoal.some(goalPlayer => goalPlayer.Player.Id.includes(player.Id)))
+        this.tableLeaderGoal.find(goalPlayer => goalPlayer.Player.Id === player.Id).nGoals += 1;
       else
-        TABLA.push(iterator.data());
-    }
-    SOR = await TABLA.sort(((a: any, b: any) => {
-      if (a.nGoals > b.nGoals)
-        return -1;
-      if (a.nGoals < b.nGoals)
-        return 1;
-    }));
-    for (let i = 0; i < SOR.length; i++) {
-      await this.afs.collection(this.afAuth.auth.currentUser.email).doc(this.afAuth.auth.currentUser.uid).collection("leadergoal").doc(nameTournament).collection('table').doc(SOR[i].Player.Id).update({ pos: (i + 1) });
-    }
+        this.tableLeaderGoal.push({ Player: player, nGoals: 1 });
+    });
   }
 }

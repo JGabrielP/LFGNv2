@@ -45,11 +45,9 @@ export class StatisticsComponent implements OnInit {
   async getLeaderboard(tournamentName: string) {
     this.statisticsService.get(tournamentName).subscribe((stats: StatsTeam[]) => {
       this.dataSource = new MatTableDataSource(stats);
-      this.dataSource.sort = this.sort;
     });
-    this.statisticsService.getLeadergoal(tournamentName).subscribe((stats: StatsTeam[]) => {
-      this.dataSourceLeadergoal = new MatTableDataSource(stats);
-      this.dataSourceLeadergoal.sort = this.hBSort;
+    this.statisticsService.getLeadergoal(tournamentName).subscribe(leaderGoal => {
+      this.dataSourceLeadergoal = new MatTableDataSource(leaderGoal);
     });
     this.statisticsService.getLeaderYCards(tournamentName).subscribe(YCards => {
       this.dataSourceLeaderYCards = new MatTableDataSource(YCards);
